@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Venue & Check Availability | Love Lawn</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="booking.css">
+</head>
+<body class="booking-page">
+
+  <!-- Ambient Light Effects -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">
+      <i class="fa-solid fa-heart brand-heart"></i>
+      <span>LOVE LAWN</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#features">Features</a>
+      <a href="booking.html" class="active">Check Availability</a>
+    </div>
+    <a href="index.html" class="btn-nav">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Back to Home</span>
+    </a>
+  </header>
+
+  <main class="booking-container">
+    <!-- Header Title -->
+    <div class="booking-header">
+      <div class="welcome-badge">
+        <span class="sparkle">✨</span>
+        <span>Live Calendar & Online Booking</span>
+        <span class="sparkle">✨</span>
+      </div>
+      <h1 class="page-title">Check Availability & Reserve Love Lawn</h1>
+      <p class="page-subtitle">Check real-time available and booked dates on our calendar below. Select your dream date to proceed with online booking and advance payment.</p>
+    </div>
+
+    <!-- Calendar Legend -->
+    <div class="calendar-legend">
+      <div class="legend-item">
+        <span class="legend-badge legend-available"></span>
+        <span>Available for Booking</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-badge legend-booked"></span>
+        <span>Booked / Not Available (Sold Out)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-badge legend-selected"></span>
+        <span>Your Selected Date</span>
+      </div>
+    </div>
+
+    <!-- Two-Column Layout: Left = Calendar & Availability, Right = Booking Form & Payment -->
+    <div class="booking-layout">
+      
+      <!-- Left Column: Interactive Availability Calendar -->
+      <section class="card calendar-card">
+        <div class="card-top">
+          <div class="month-selector">
+            <button id="prev-month-btn" class="month-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            <h2 id="current-month-display" class="month-title">November 2026</h2>
+            <button id="next-month-btn" class="month-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <span class="live-status-pill"><span class="pulse-green"></span> Live Updates</span>
+        </div>
+
+        <!-- Days of Week Header -->
+        <div class="calendar-weekdays">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+
+        <!-- Calendar Days Grid -->
+        <div class="calendar-days-grid" id="calendar-days-container">
+          <!-- Dynamically populated by booking.js -->
+        </div>
+
+        <!-- Selected Date Status Banner -->
+        <div class="selected-date-banner" id="date-status-box">
+          <div class="date-icon"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="date-text-group">
+            <span class="selected-label">Selected Date</span>
+            <strong id="selected-date-text">Please click an available date from calendar</strong>
+          </div>
+          <span id="availability-tag" class="status-pill status-ready">Select a Date</span>
+        </div>
+
+        <!-- Slot Selection -->
+        <div class="slot-selector-section">
+          <label class="input-label"><i class="fa-regular fa-clock"></i> Select Event Timing Slot</label>
+          <div class="slot-options">
+            <label class="slot-card active">
+              <input type="radio" name="event-slot" value="Evening Gala (4 PM - 12 AM)" checked>
+              <div class="slot-details">
+                <strong>Evening Gala (4 PM - 12 AM)</strong>
+                <span>Ideal for Receptions, Sangeet & Weddings</span>
+              </div>
+              <span class="slot-price">₹1,20,000</span>
+            </label>
+
+            <label class="slot-card">
+              <input type="radio" name="event-slot" value="Full Day (9 AM - 12 AM)">
+              <div class="slot-details">
+                <strong>Full Day Royal (9 AM - 12 AM)</strong>
+                <span>Complete 15-Hour Celebration Access</span>
+              </div>
+              <span class="slot-price">₹1,85,000</span>
+            </label>
+
+            <label class="slot-card">
+              <input type="radio" name="event-slot" value="Daytime (9 AM - 3 PM)">
+              <div class="slot-details">
+                <strong>Daytime Soiree (9 AM - 3 PM)</strong>
+                <span>Ideal for Engagements & Birthday Events</span>
+              </div>
+              <span class="slot-price">₹80,000</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Booking Details & Online Payment -->
+      <section class="card form-card">
+        <h3 class="form-title"><i class="fa-solid fa-file-signature"></i> Guest & Event Details</h3>
+        
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fa-regular fa-user"></i> Full Name *</label>
+              <input type="text" id="cust-name" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-phone"></i> Mobile Number *</label>
+              <input type="tel" id="cust-phone" placeholder="e.g. 9876543210" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fa-regular fa-envelope"></i> Email Address</label>
+              <input type="email" id="cust-email" placeholder="e.g. rahul@example.com">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-rings-wedding"></i> Occasion / Event Type *</label>
+              <select id="event-type" required>
+                <option value="Wedding Ceremony & Reception">Wedding & Reception</option>
+                <option value="Sangeet / Haldi / Mehendi">Sangeet / Haldi / Mehendi</option>
+                <option value="Ring Ceremony / Engagement">Ring Ceremony / Engagement</option>
+                <option value="Grand Birthday / Anniversary">Grand Birthday / Anniversary</option>
+                <option value="Corporate Gala / Annual Event">Corporate Gala / Event</option>
+                <option value="Other Celebration">Other Celebration</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-users"></i> Estimated Guest Count</label>
+            <select id="guest-count">
+              <option value="200 - 500 Guests">200 - 500 Guests</option>
+              <option value="500 - 1000 Guests" selected>500 - 1000 Guests</option>
+              <option value="1000 - 2000+ Guests">1000 - 2000+ Guests</option>
+            </select>
+          </div>
+
+          <!-- Add-on Services Checklist -->
+          <div class="form-group">
+            <label class="input-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Optional Add-on Packages</label>
+            <div class="addons-grid">
+              <label class="addon-chip">
+                <input type="checkbox" id="addon-lights" checked onchange="calculateTotal()">
+                <span>🌟 Starlight Fairy Light Canopy (+₹20,000)</span>
+              </label>
+              <label class="addon-chip">
+                <input type="checkbox" id="addon-stage" onchange="calculateTotal()">
+                <span>👑 Royal Stage Floral Decor (+₹35,000)</span>
+              </label>
+              <label class="addon-chip">
+                <input type="checkbox" id="addon-dj" onchange="calculateTotal()">
+                <span>🎵 Concert DJ & Sound System (+₹15,000)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Price Breakdown Summary -->
+          <div class="price-summary-box">
+            <div class="summary-line">
+              <span>Base Lawn Venue Rental:</span>
+              <span id="base-price-display">₹1,20,000</span>
+            </div>
+            <div class="summary-line">
+              <span>Selected Add-ons:</span>
+              <span id="addon-price-display">₹20,000</span>
+            </div>
+            <div class="summary-line total-line">
+              <span>Total Estimated Amount:</span>
+              <strong id="total-price-display">₹1,40,000</strong>
+            </div>
+            <div class="token-alert">
+              <i class="fa-solid fa-shield-check"></i>
+              <span>Book now with just <strong>₹25,000 token advance</strong>. Remaining balance payable at venue.</span>
+            </div>
+          </div>
+
+          <!-- Payment Options -->
+          <div class="payment-methods-box">
+            <label class="input-label"><i class="fa-solid fa-credit-card"></i> Choose Payment Method</label>
+            <div class="pay-methods-grid">
+              <label class="pay-method active">
+                <input type="radio" name="pay-option" value="UPI / QR Code" checked>
+                <div class="pay-method-content">
+                  <i class="fa-brands fa-google-pay"></i>
+                  <span>UPI / QR Code (GPay, PhonePe, Paytm)</span>
+                </div>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="pay-option" value="Credit/Debit Card">
+                <div class="pay-method-content">
+                  <i class="fa-regular fa-credit-card"></i>
+                  <span>Debit / Credit Card</span>
+                </div>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="pay-option" value="Net Banking">
+                <div class="pay-method-content">
+                  <i class="fa-solid fa-building-columns"></i>
+                  <span>Net Banking (All Indian Banks)</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="book-now-btn" class="btn btn-luxury submit-btn" disabled>
+            <span>Lock Date & Pay ₹25,000 Advance</span>
+            <i class="fa-solid fa-lock"></i>
+          </button>
+          <p class="terms-note"><i class="fa-solid fa-lock"></i> 100% Secure SSL encrypted checkout & instant WhatsApp booking receipt.</p>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Interactive Payment & Confirmation Modal -->
+  <div id="payment-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div id="modal-step-payment">
+        <div class="modal-badge"><i class="fa-solid fa-shield-halved"></i> Secure Instant Payment</div>
+        <h3 class="modal-title">Complete ₹25,000 Advance Token</h3>
+        <p class="modal-sub">Scan the QR code below via Google Pay, PhonePe, Paytm or any UPI app to confirm your booking for Love Lawn.</p>
+
+        <!-- Dynamic QR Code Box -->
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=lovelawn@upi&pn=LoveLawnVenue&am=25000&cu=INR" alt="UPI QR Code" class="qr-image">
+          <div class="qr-scan-guide">
+            <span class="upi-id-tag"><i class="fa-solid fa-qrcode"></i> UPI ID: <strong>lovelawn@upi</strong></span>
+            <span class="timer-tag"><i class="fa-regular fa-clock"></i> Session valid for 10:00 mins</span>
+          </div>
+        </div>
+
+        <button class="btn btn-luxury full-width-btn" onclick="simulatePaymentSuccess()">
+          <i class="fa-solid fa-check-circle"></i> I Have Completed Payment
+        </button>
+      </div>
+
+      <!-- Success Receipt Step (Hidden initially) -->
+      <div id="modal-step-success" style="display: none;">
+        <div class="success-icon-box">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 class="success-title">Venue Booking Confirmed! 🎉</h3>
+        <p class="success-desc">Congratulations! Your date at <strong>Love Lawn</strong> has been reserved successfully.</p>
+
+        <div class="receipt-box" id="booking-receipt-details">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="receipt-actions">
+          <button class="btn btn-luxury" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Print Receipt
+          </button>
+          <a href="#" id="receipt-whatsapp-link" target="_blank" class="btn btn-whatsapp">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp Confirmation
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>
+      © 2026 Love Lawn. All rights reserved. Crafted with elegance & love.
+      <a href="owner.html" class="owner-footer-link" style="margin-left: 12px; color: rgba(212, 175, 55, 0.6); text-decoration: none;"><i class="fa-solid fa-lock"></i> Owner Login</a>
+    </p>
+  </footer>
+
+  <script src="booking.js"></script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Portal & Lawn Management | Love Lawn</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="owner.css">
+</head>
+<body class="owner-body">
+
+  <!-- Ambient Light Effects -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Owner Login Section (Shown if NOT logged in) -->
+  <div id="owner-login-view" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-badge">
+        <i class="fa-solid fa-lock"></i>
+        <span>Restricted Owner Access</span>
+      </div>
+
+      <div class="brand-logo-owner">
+        <i class="fa-solid fa-heart brand-heart"></i>
+        <h2>LOVE LAWN</h2>
+        <span class="sub-label">Proprietor / Management Console</span>
+      </div>
+
+      <p class="login-desc">This portal is strictly reserved for the owner of Love Lawn. Please enter your confidential credentials to manage dates, bookings, and pricing.</p>
+
+      <form id="owner-login-form" onsubmit="handleOwnerLogin(event)">
+        <div class="owner-field">
+          <label><i class="fa-solid fa-user-shield"></i> Owner ID / Username</label>
+          <input type="text" id="owner-username" placeholder="Enter owner ID" required autocomplete="username">
+        </div>
+
+        <div class="owner-field">
+          <label><i class="fa-solid fa-key"></i> Security Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="owner-password" placeholder="Enter owner password" required autocomplete="current-password">
+            <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility()"><i class="fa-regular fa-eye" id="eye-icon"></i></button>
+          </div>
+        </div>
+
+        <div id="login-error-msg" class="login-error" style="display: none;">
+          <i class="fa-solid fa-triangle-exclamation"></i> Invalid Owner ID or Password.
+        </div>
+
+        <button type="submit" class="btn btn-luxury full-btn">
+          <span>Authorize & Enter Dashboard</span>
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+
+        <div class="demo-credentials-hint">
+          <span>🔐 Default Owner Login:</span>
+          <strong>ID: <code>owner</code> | Password: <code>lawn123</code></strong>
+        </div>
+
+        <div class="back-home-wrap">
+          <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Public Website</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Owner Dashboard (Shown ONLY when logged in) -->
+  <div id="owner-dashboard-view" class="dashboard-wrapper" style="display: none;">
+    
+    <!-- Top Bar Navigation -->
+    <header class="owner-topbar">
+      <div class="topbar-left">
+        <div class="brand-brand">
+          <i class="fa-solid fa-crown text-gold"></i>
+          <strong>LOVE LAWN</strong>
+          <span class="badge-role">Owner Control Panel</span>
+        </div>
+      </div>
+      
+      <div class="topbar-right">
+        <div class="owner-profile-pill">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Logged in as <strong>Owner</strong></span>
+        </div>
+        <a href="index.html" target="_blank" class="preview-btn" title="View Customer Website">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Live Site</span>
+        </a>
+        <button class="logout-btn" onclick="handleOwnerLogout()">
+          <i class="fa-solid fa-power-off"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="owner-main">
+      
+      <!-- Welcome Header -->
+      <div class="dashboard-welcome">
+        <div>
+          <h1 class="welcome-heading">Welcome Back, Lawn Owner</h1>
+          <p class="welcome-sub">Manage availability dates, adjust live rental pricing, and view customer reservations in real-time.</p>
+        </div>
+        <div class="quick-stats-row">
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-booked-count">0</span>
+            <span class="stat-text">Dates Booked</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-revenue-est">₹0</span>
+            <span class="stat-text">Advance Tokens</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Sections Grid -->
+      <div class="owner-grid">
+        
+        <!-- SECTION 1: Date Availability & Booking Toggle -->
+        <section class="owner-card date-manager-card">
+          <div class="card-header-row">
+            <div>
+              <span class="card-tag"><i class="fa-solid fa-calendar-days"></i> AVAILABILITY MANAGER</span>
+              <h2 class="card-title">Update Lawn Dates (Available vs Booked)</h2>
+              <p class="card-desc">Click any date below to instantly toggle it between <strong>Available (Green)</strong> and <strong>Booked (Red)</strong>. Changes reflect immediately on the customer booking page.</p>
+            </div>
+            
+            <div class="month-controls">
+              <button class="month-btn" onclick="changeOwnerMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+              <span class="month-label" id="owner-month-display">November 2026</span>
+              <button class="month-btn" onclick="changeOwnerMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <!-- Quick Toggle Bar -->
+          <div class="calendar-instructions-bar">
+            <span class="instr-item"><span class="dot dot-available"></span> <strong>Green:</strong> Lawn is Available</span>
+            <span class="instr-item"><span class="dot dot-booked"></span> <strong>Red:</strong> Lawn is Booked (Sold Out)</span>
+            <span class="instr-tip"><i class="fa-solid fa-hand-pointer"></i> <em>Click any date to switch its status!</em></span>
+          </div>
+
+          <!-- Calendar Days Grid -->
+          <div class="owner-calendar-weekdays">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div class="owner-calendar-grid" id="owner-calendar-days">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Quick Date Status Switcher -->
+          <div class="manual-date-picker-box">
+            <h4><i class="fa-solid fa-sliders"></i> Quick Custom Date Toggle:</h4>
+            <div class="quick-toggle-form">
+              <input type="date" id="manual-date-input" value="2026-11-15">
+              <button type="button" class="btn btn-booked-action" onclick="toggleManualDate('book')">
+                <i class="fa-solid fa-ban"></i> Mark as Booked / Closed
+              </button>
+              <button type="button" class="btn btn-available-action" onclick="toggleManualDate('free')">
+                <i class="fa-solid fa-check"></i> Mark as Available
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: Dynamic Pricing Manager -->
+        <section class="owner-card pricing-manager-card">
+          <span class="card-tag"><i class="fa-solid fa-tag"></i> PRICE CONTROLLER</span>
+          <h2 class="card-title">Manage Lawn & Package Pricing</h2>
+          <p class="card-desc">Increase or decrease rental rates at any time. When you click Save, new prices will automatically apply to the customer booking page.</p>
+
+          <form id="price-update-form" onsubmit="savePricingChanges(event)">
+            
+            <div class="pricing-group">
+              <h3 class="group-title"><i class="fa-regular fa-clock"></i> Timing Slot Base Rates (₹)</h3>
+              
+              <div class="price-input-row">
+                <div class="price-field">
+                  <label>Evening Gala Slot (4 PM - 12 AM)</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-evening" value="120000" min="10000" step="5000" required>
+                  </div>
+                </div>
+
+                <div class="price-field">
+                  <label>Full Day Royal (9 AM - 12 AM)</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-fullday" value="185000" min="20000" step="5000" required>
+                  </div>
+                </div>
+
+                <div class="price-field">
+                  <label>Daytime Soiree (9 AM - 3 PM)</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-daytime" value="80000" min="10000" step="5000" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pricing-group">
+              <h3 class="group-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Add-on Package Rates (₹)</h3>
+              
+              <div class="price-input-row">
+                <div class="price-field">
+                  <label>Fairy Light Canopy</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-lights" value="20000" min="0" step="1000" required>
+                  </div>
+                </div>
+
+                <div class="price-field">
+                  <label>Royal Floral Stage Decor</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-stage" value="35000" min="0" step="1000" required>
+                  </div>
+                </div>
+
+                <div class="price-field">
+                  <label>Concert DJ & Sound</label>
+                  <div class="input-prefix-wrap">
+                    <span class="prefix">₹</span>
+                    <input type="number" id="price-dj" value="15000" min="0" step="1000" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pricing-group">
+              <h3 class="group-title"><i class="fa-solid fa-coins"></i> Advance Token Required (₹)</h3>
+              <div class="price-field single-field">
+                <label>Online Booking Advance Token Amount</label>
+                <div class="input-prefix-wrap">
+                  <span class="prefix">₹</span>
+                  <input type="number" id="price-token" value="25000" min="5000" step="5000" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="price-actions">
+              <button type="submit" class="btn btn-luxury save-prices-btn">
+                <i class="fa-solid fa-floppy-disk"></i> Save & Apply New Rates
+              </button>
+              <span id="price-saved-alert" class="saved-notification" style="display: none;">
+                <i class="fa-solid fa-circle-check"></i> Prices updated successfully!
+              </span>
+            </div>
+
+          </form>
+        </section>
+
+      </div>
+
+      <!-- SECTION 3: Customer Booking List (View Only / Read-Protected) -->
+      <section class="owner-card bookings-card">
+        <div class="bookings-card-header">
+          <div>
+            <span class="card-tag"><i class="fa-solid fa-clipboard-list"></i> RESERVATIONS LOG</span>
+            <h2 class="card-title">Customer Online Bookings</h2>
+            <p class="card-desc">Customer reservation details received online. Protected against unauthorized outside alteration.</p>
+          </div>
+          <button class="btn btn-glass btn-sm" onclick="renderBookingsTable()">
+            <i class="fa-solid fa-rotate-right"></i> Refresh List
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="bookings-table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Reserved Date</th>
+                <th>Customer Name</th>
+                <th>Mobile Number</th>
+                <th>Event Type</th>
+                <th>Timing Slot</th>
+                <th>Token Paid</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body">
+              <!-- Dynamically populated from localStorage -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Venue Photos & Gallery Manager -->
+      <section class="owner-card gallery-manager-card" style="margin-top: 36px;">
+        <div class="bookings-card-header">
+          <div>
+            <span class="card-tag"><i class="fa-solid fa-images"></i> PHOTO GALLERY MANAGER</span>
+            <h2 class="card-title">Manage Venue Photos</h2>
+            <p class="card-desc">Add new photographs of the lawn, decor, stages, or delete existing photos. Updates display immediately on the public website.</p>
+          </div>
+          <a href="index.html#gallery" target="_blank" class="btn btn-glass btn-sm">
+            <i class="fa-solid fa-eye"></i> View Live Gallery
+          </a>
+        </div>
+
+        <!-- Add Photo Form -->
+        <div class="add-photo-box">
+          <h3 class="group-title"><i class="fa-solid fa-plus-circle"></i> Add New Venue Photo</h3>
+          <form id="add-photo-form" onsubmit="handleAddNewPhoto(event)">
+            <div class="photo-form-row">
+              <div class="photo-field">
+                <label>Photo Title / Caption *</label>
+                <input type="text" id="new-photo-title" placeholder="e.g. Royal VIP Gazebo & Lawn" required>
+              </div>
+              <div class="photo-field">
+                <label>Category *</label>
+                <select id="new-photo-category" required>
+                  <option value="Night Illumination">Night Illumination (Fairy Lights & Lanterns)</option>
+                  <option value="Floral Stage">Floral Stage (Mandap & Stage Decor)</option>
+                  <option value="Green Grounds">Green Grounds (Lawn & Meadows)</option>
+                  <option value="Dining & Banquet">Dining & Banquet (Food & Seating)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="photo-field">
+              <label>Image URL * (Paste image link or click a sample below)</label>
+              <input type="url" id="new-photo-url" placeholder="https://images.unsplash.com/..." required>
+              
+              <!-- Quick Sample Preset Buttons for Owner -->
+              <div class="preset-links">
+                <span class="preset-label">Quick Sample Photos:</span>
+                <button type="button" class="preset-pill" onclick="setPresetPhoto('Poolside Luxury Lawn', 'Green Grounds', 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=80')">🌴 Poolside Lawn</button>
+                <button type="button" class="preset-pill" onclick="setPresetPhoto('Golden Chandelier Pavilion', 'Night Illumination', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80')">✨ Chandelier Pavilion</button>
+                <button type="button" class="preset-pill" onclick="setPresetPhoto('Grand Red Carpet Stage', 'Floral Stage', 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=80')">👑 Red Carpet Stage</button>
+                <button type="button" class="preset-pill" onclick="setPresetPhoto('Lawn Garden Buffet Station', 'Dining & Banquet', 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=900&q=80')">🥂 Garden Buffet</button>
+              </div>
+            </div>
+
+            <div class="photo-submit-row">
+              <button type="submit" class="btn btn-luxury">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Add Photo to Live Gallery
+              </button>
+              <span id="photo-added-alert" class="saved-notification" style="display: none;">
+                <i class="fa-solid fa-circle-check"></i> Photo published to website!
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Current Live Photos Grid (With Delete Action) -->
+        <div class="owner-gallery-section">
+          <h3 class="group-title"><i class="fa-solid fa-photo-film"></i> Current Live Venue Photos (<span id="owner-photo-count">0</span>)</h3>
+          <div class="owner-gallery-grid" id="owner-gallery-cards">
+            <!-- Dynamically populated from localStorage -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="owner.js"></script>
+</body>
+</html>
