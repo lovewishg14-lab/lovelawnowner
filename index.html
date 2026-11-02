@@ -3,79 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Love Lawn | Luxury Garden & Event Venue</title>
+  <title>LOVE LAWN | A Sanctuary of Elegance</title>
   
-  <!-- Premium Google Fonts -->
+  <!-- Google Fonts: Cinzel & Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="font-montserrat">
 
   <!-- Floating Particles Canvas -->
   <canvas id="particles-canvas"></canvas>
 
-  <!-- Ambient Light Effects (Dusty Mauve, Silver & Pearl) -->
+  <!-- Ambient Light Effects -->
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
   <div class="glow-orb orb-3"></div>
 
   <!-- Header Navigation -->
   <header class="navbar">
-    <div class="nav-brand">
-      <i class="fa-solid fa-heart brand-heart"></i>
-      <span>LOVE LAWN</span>
-    </div>
+    <a href="#home" class="nav-brand group">
+      <i class="fa-solid fa-heart brand-heart text-pink-400"></i>
+      <span class="font-cinzel">LOVE LAWN</span>
+    </a>
     <nav class="nav-links">
-      <a href="#home" class="active">Home</a>
-      <a href="#features">Features</a>
-      <a href="#gallery">Venue Photos</a>
-      <a href="booking.html">Check Availability</a>
-      <a href="#contact">Contact</a>
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#gallery" class="nav-link">Venue Photos</a>
+      <a href="booking.html" class="nav-link">Check Availability</a>
+      <a href="#contact" class="nav-link">Contact</a>
     </nav>
-    <a href="booking.html" class="btn-nav">
+    <a href="booking.html" class="btn-nav gold-btn-gradient">
       <span>Book Venue</span>
       <i class="fa-solid fa-arrow-right"></i>
     </a>
   </header>
 
   <!-- Hero Section -->
-  <main id="home" class="hero">
-    <div class="hero-container">
+  <main id="home" class="hero hero-bg">
+    
+    <!-- Animated Stars Container -->
+    <div id="star-container"></div>
+    
+    <!-- Subtle Ambient Glow -->
+    <div class="hero-ambient-glow"></div>
 
-      <!-- Badge with shimmer -->
-      <div class="welcome-badge">
-        <span class="sparkle">✨</span>
-        <span>A Sanctuary of Elegance & Serenity</span>
-        <span class="sparkle">✨</span>
+    <div class="hero-container relative z-10">
+
+      <!-- Badge with Floating Animation -->
+      <div class="welcome-badge float-anim">
+        <span class="sparkle text-gold-400">✨</span>
+        <span class="badge-text">A Sanctuary of Elegance &amp; Serenity</span>
+        <span class="sparkle text-gold-400">✨</span>
       </div>
 
-      <!-- Main Animated Heading -->
+      <!-- Main Heading with Gold Gradient & Typography -->
       <div class="title-wrapper">
-        <h1 class="main-title" id="animated-title">
-          <span class="word word-welcome">Welcome</span>
-          <span class="word word-to">to</span>
-          <span class="word word-love">Love</span>
-          <span class="word word-lawn">Lawn</span>
+        <h1 class="main-title font-cinzel">
+          <span class="hero-subtext">Welcome To</span>
+          <span class="gold-text-gradient">LOVE LAWN</span>
         </h1>
-        <div class="title-underline"></div>
+        <div class="decorative-underline"></div>
       </div>
 
-      <!-- Tagline / Subtitle -->
+      <!-- Subtitle -->
       <p class="hero-subtitle">
         Step into sprawling emerald greens beneath starlit skies. Where timeless luxury, natural beauty, and celebration come together.
       </p>
 
       <!-- Action Buttons -->
       <div class="cta-group">
-        <a href="booking.html" class="btn btn-luxury">
-          <span class="btn-text">Check Availability & Book</span>
-          <i class="fa-solid fa-calendar-check"></i>
+        <a href="booking.html" class="btn gold-btn-gradient">
+          <span class="btn-text">Book Your Venue Now</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
         <a href="#features" class="btn btn-glass">
           <span class="btn-text">Explore The Grounds</span>
@@ -113,7 +118,7 @@
           <div class="icon-circle"><i class="fa-solid fa-shield-heart"></i></div>
           <div class="highlight-info">
             <span class="highlight-number">5-Star</span>
-            <span class="highlight-label">Hospitality & Decor</span>
+            <span class="highlight-label">Hospitality &amp; Decor</span>
           </div>
         </div>
       </div>

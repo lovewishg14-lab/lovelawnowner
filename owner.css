@@ -53,11 +53,15 @@
 }
 
 .brand-logo-owner h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-cinzel);
   font-size: 2rem;
-  color: var(--gold-primary);
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   letter-spacing: 2px;
   margin-top: 6px;
+  font-weight: 800;
 }
 
 .brand-logo-owner .sub-label {

@@ -27,14 +27,14 @@ class Particle {
     this.speedY = (Math.random() - 0.5) * 0.7 - 0.2;
     this.alpha = Math.random() * 0.6 + 0.2;
     this.pulse = Math.random() * 0.03 + 0.01;
-    // Dusty Mauve + Pearl + Silver luxury shimmer particles
+    // Royal Gold + Diamond Star + Plum shimmer particles
     const rand = Math.random();
-    if (rand < 0.38) {
-      this.color = '194, 145, 167'; // Dusty Mauve
-    } else if (rand < 0.72) {
-      this.color = '252, 249, 245'; // Pearl Luminous
+    if (rand < 0.45) {
+      this.color = '212, 175, 55'; // Royal Gold
+    } else if (rand < 0.75) {
+      this.color = '252, 246, 186'; // Bright Starlight Gold
     } else {
-      this.color = '214, 219, 227'; // Shimmering Silver
+      this.color = '255, 255, 255'; // Diamond Star White
     }
   }
 
@@ -220,3 +220,41 @@ function closeLightbox() {
 
 // Initial Call
 renderVenueGallery();
+
+// =========================================
+// ANIMATED TWINKLING STARS GENERATOR
+// =========================================
+function initStarField() {
+  const container = document.getElementById('star-container');
+  if (!container) return;
+  container.innerHTML = '';
+  const starCount = 100;
+
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    const isGold = Math.random() > 0.75;
+    star.classList.add('star');
+    if (isGold) star.classList.add('star-gold');
+
+    const top = Math.random() * 100;
+    const left = Math.random() * 100;
+    const size = Math.random() * 2 + 1;
+    const duration = Math.random() * 4 + 2;
+    const delay = Math.random() * 4;
+
+    star.style.top = `${top}%`;
+    star.style.left = `${left}%`;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.setProperty('--duration', `${duration}s`);
+    star.style.animationDelay = `${delay}s`;
+
+    container.appendChild(star);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initStarField);
+} else {
+  initStarField();
+}

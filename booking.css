@@ -20,15 +20,15 @@
 }
 
 .page-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-cinzel);
   font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 800;
   margin: 12px 0 16px;
-  background: linear-gradient(135deg, #ffffff 20%, #f6d365 70%, #d4af37 100%);
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 20px rgba(246, 211, 101, 0.25));
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.25));
 }
 
 .page-subtitle {
