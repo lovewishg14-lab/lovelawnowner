@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Venue & Check Availability | Love Lawn</title>
   
-  <!-- Google Fonts: Cinzel & Montserrat -->
+  <!-- Google Fonts: Syne, Cinzel, Plus Jakarta Sans & Space Mono (b-egg style) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -17,6 +17,27 @@
   <link rel="stylesheet" href="booking.css">
 </head>
 <body class="booking-page">
+
+  <!-- Luxury Preloader -->
+  <div id="luxury-preloader" class="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-brand">
+        <i class="fa-solid fa-crown"></i>
+        <span>LOVE LAWN</span>
+      </div>
+      <div class="preloader-counter">
+        <span id="preloader-number">0</span><span class="preloader-percent">%</span>
+      </div>
+      <div class="preloader-bar-track">
+        <div id="preloader-bar" class="preloader-bar-fill"></div>
+      </div>
+      <div class="preloader-status">Loading Live Availability Engine...</div>
+    </div>
+  </div>
+
+  <!-- Custom Cursor (Desktop) -->
+  <div class="custom-cursor-dot" id="cursor-dot"></div>
+  <div class="custom-cursor-circle" id="cursor-circle"></div>
 
   <!-- Ambient Light Effects (Dusty Mauve, Silver & Pearl) -->
   <div class="glow-orb orb-1"></div>
@@ -312,6 +333,9 @@
     <p>© 2026 Love Lawn. All rights reserved. Crafted with elegance & love.</p>
   </footer>
 
+  <!-- GSAP 3 & Lenis Smooth Scroll -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
   <script src="booking.js"></script>
 </body>
 </html>

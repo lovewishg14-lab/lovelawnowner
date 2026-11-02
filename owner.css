@@ -356,8 +356,10 @@
 }
 
 .welcome-heading {
-  font-family: var(--font-serif);
+  font-family: var(--font-syne), var(--font-serif);
   font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: #fff;
   margin-bottom: 6px;
 }
@@ -379,13 +381,49 @@
   padding: 14px 22px;
   text-align: center;
   min-width: 140px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-pill:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 .stat-num {
   display: block;
-  font-size: 1.5rem;
+  font-family: var(--font-syne);
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--gold-primary);
+  font-feature-settings: "tnum";
+}
+
+.stat-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-family: var(--font-syne), var(--font-serif);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.card-tag {
+  font-family: var(--font-mono) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.18em !important;
+}
+
+.owner-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.owner-card:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
 .stat-text {

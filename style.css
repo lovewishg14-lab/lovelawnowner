@@ -23,11 +23,13 @@
   --text-muted: #d1d5db;
   --text-gold: #f5c34e;
 
+  --font-syne: 'Syne', sans-serif;
   --font-cinzel: 'Cinzel', serif;
-  --font-montserrat: 'Montserrat', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-montserrat: 'Plus Jakarta Sans', sans-serif;
   --font-serif: 'Cinzel', serif;
-  --font-display: 'Cinzel', serif;
-  --font-sans: 'Montserrat', sans-serif;
+  --font-display: 'Syne', 'Cinzel', serif;
 }
 
 * {
@@ -1047,3 +1049,300 @@ body::before {
     scroll-behavior: smooth;
   }
 }
+
+/* =======================================================
+   B-EGG.FARM INSPIRED LUXURY ANIMATIONS & TYPOGRAPHY
+   ======================================================= */
+
+/* Lenis Smooth Scroll Integration */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Typography Enhancements */
+.font-syne {
+  font-family: var(--font-syne) !important;
+}
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+.main-title {
+  font-family: var(--font-syne), var(--font-cinzel), serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.section-tag {
+  font-family: var(--font-mono) !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.22em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+.section-title {
+  font-family: var(--font-syne), var(--font-cinzel), serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* 1. LUXURY PRELOADER (0 to 100 Numeric Counter & Curtain Wipe) */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #1e0f2b 0%, #0d0714 85%);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.85s ease;
+  will-change: transform, opacity;
+}
+
+.preloader.preloader-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader-inner {
+  text-align: center;
+  max-width: 440px;
+  width: 90%;
+  position: relative;
+}
+
+.preloader-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-cinzel);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--gold-secondary);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.preloader-brand i {
+  color: #f5c34e;
+  animation: pulseSparkle 2s infinite;
+}
+
+.preloader-counter {
+  font-family: var(--font-syne);
+  font-size: clamp(4rem, 11vw, 7.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  background: linear-gradient(135deg, #ffffff 0%, #fde08b 45%, #d4af37 80%, #aa7c11 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 24px;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+
+.preloader-percent {
+  font-size: 0.38em;
+  color: var(--gold-400);
+  margin-left: 2px;
+}
+
+.preloader-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.preloader-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37, #fde08b, #fff, #fde08b, #d4af37);
+  box-shadow: 0 0 18px rgba(245, 195, 78, 0.7);
+  border-radius: 99px;
+  transition: width 0.06s linear;
+}
+
+.preloader-status {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: rgba(214, 219, 227, 0.65);
+  text-transform: uppercase;
+}
+
+/* 2. CONTINUOUS INFINITE MARQUEE TICKER (b-egg style) */
+.marquee-strip {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(26, 16, 37, 0.85);
+  border-top: 1px solid rgba(212, 175, 55, 0.22);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  padding: 18px 0;
+  position: relative;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeRun 26s linear infinite;
+  will-change: transform;
+}
+
+.marquee-strip:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  font-family: var(--font-syne);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold-secondary);
+  white-space: nowrap;
+}
+
+.marquee-star {
+  color: #fff;
+  opacity: 0.45;
+  font-size: 0.85rem;
+}
+
+@keyframes marqueeRun {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* 3. CUSTOM FOLLOWER CURSOR (Desktop Only) */
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #f5c34e;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease, width 0.2s, height 0.2s;
+  box-shadow: 0 0 10px rgba(245, 195, 78, 0.8);
+}
+
+.custom-cursor-circle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(245, 195, 78, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.25s, height 0.25s, background-color 0.25s, border-color 0.25s;
+}
+
+.custom-cursor-circle.cursor-hover {
+  width: 68px;
+  height: 68px;
+  background: rgba(245, 195, 78, 0.14);
+  border-color: #f5c34e;
+}
+
+@media (pointer: coarse), (max-width: 1024px) {
+  .custom-cursor-dot,
+  .custom-cursor-circle {
+    display: none !important;
+  }
+}
+
+/* 4. 3D TILT & MAGNETIC INTERACTIONS */
+.feature-card,
+.highlight-item,
+.gallery-item {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  will-change: transform;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.2) !important;
+}
+
+.highlight-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 175, 55, 0.15) !important;
+}
+
+.btn-nav,
+.btn.gold-btn-gradient,
+.btn.btn-luxury {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.btn-nav:hover,
+.btn.gold-btn-gradient:hover,
+.btn.btn-luxury:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.45);
+}
+
+/* 5. SCROLL TRIGGERED REVEAL ANIMATIONS */
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-stagger.is-revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.is-revealed > *:nth-child(1) { transition-delay: 0.08s; }
+.reveal-stagger.is-revealed > *:nth-child(2) { transition-delay: 0.16s; }
+.reveal-stagger.is-revealed > *:nth-child(3) { transition-delay: 0.24s; }
+.reveal-stagger.is-revealed > *:nth-child(4) { transition-delay: 0.32s; }

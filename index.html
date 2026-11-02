@@ -5,17 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LOVE LAWN | A Sanctuary of Elegance</title>
   
-  <!-- Google Fonts: Cinzel & Montserrat -->
+  <!-- Google Fonts: Syne, Cinzel, Plus Jakarta Sans & Space Mono (b-egg style) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-montserrat">
+<body>
+
+  <!-- Luxury Preloader (b-egg inspired 0-100% numerical counter & curtain wipe) -->
+  <div id="luxury-preloader" class="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-brand">
+        <i class="fa-solid fa-crown"></i>
+        <span>LOVE LAWN</span>
+      </div>
+      <div class="preloader-counter">
+        <span id="preloader-number">0</span><span class="preloader-percent">%</span>
+      </div>
+      <div class="preloader-bar-track">
+        <div id="preloader-bar" class="preloader-bar-fill"></div>
+      </div>
+      <div class="preloader-status">Curating Sanctuary of Elegance...</div>
+    </div>
+  </div>
+
+  <!-- Custom Follower Cursor (Desktop) -->
+  <div class="custom-cursor-dot" id="cursor-dot"></div>
+  <div class="custom-cursor-circle" id="cursor-circle"></div>
 
   <!-- Floating Particles Canvas -->
   <canvas id="particles-canvas"></canvas>
@@ -126,8 +147,42 @@
     </div>
   </main>
 
+  <!-- Continuous Infinite Running Marquee (b-egg style) -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>✨ ROYAL WEDDING LAWN</span>
+        <span class="marquee-star">✦</span>
+        <span>🌿 5-ACRE VELVET MEADOWS</span>
+        <span class="marquee-star">✦</span>
+        <span>👑 2,000+ GUEST CAPACITY</span>
+        <span class="marquee-star">✦</span>
+        <span>🌟 STARLIGHT FAIRY CANOPY</span>
+        <span class="marquee-star">✦</span>
+        <span>🥂 LUXURY BANQUET DINING</span>
+        <span class="marquee-star">✦</span>
+        <span>🎵 ACOUSTIC LIVE CONCERT STAGE</span>
+        <span class="marquee-star">✦</span>
+      </div>
+      <div class="marquee-content" aria-hidden="true">
+        <span>✨ ROYAL WEDDING LAWN</span>
+        <span class="marquee-star">✦</span>
+        <span>🌿 5-ACRE VELVET MEADOWS</span>
+        <span class="marquee-star">✦</span>
+        <span>👑 2,000+ GUEST CAPACITY</span>
+        <span class="marquee-star">✦</span>
+        <span>🌟 STARLIGHT FAIRY CANOPY</span>
+        <span class="marquee-star">✦</span>
+        <span>🥂 LUXURY BANQUET DINING</span>
+        <span class="marquee-star">✦</span>
+        <span>🎵 ACOUSTIC LIVE CONCERT STAGE</span>
+        <span class="marquee-star">✦</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Features Section -->
-  <section id="features" class="features-section">
+  <section id="features" class="features-section reveal-fade-up">
     <div class="section-header">
       <span class="section-tag">PREMIUM AMENITIES</span>
       <h2 class="section-title">Designed for Dream Celebrations</h2>
@@ -209,6 +264,9 @@
     <p>© 2026 Love Lawn. All rights reserved. Crafted with elegance & love.</p>
   </footer>
 
+  <!-- GSAP 3 & Lenis Smooth Scroll (b-egg luxury animation engine) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

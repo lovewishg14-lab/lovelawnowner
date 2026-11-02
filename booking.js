@@ -19,6 +19,10 @@ const DEFAULT_PRICING = {
   token: 25000
 };
 
+// Central Real-Time Cloud Database Endpoints (Syncs All Phones & Computers Live)
+const CLOUD_SYNC_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a19d57ef2312c5";
+const CLOUD_PRICING_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a19d59769b12c7";
+
 // Retrieve Shared Data from LocalStorage (Only genuine owner/customer booked dates appear)
 function getLiveBookedDates() {
   const raw = localStorage.getItem('loveLawn_bookedDates');
@@ -46,6 +50,58 @@ function getLiveBookedDates() {
     return new Set();
   }
 }
+
+// Push Date to Cloud Central Database
+async function syncDatesToCloud(datesArray) {
+  try {
+    await fetch(CLOUD_SYNC_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'LoveLawn_BookedDates',
+        data: { dates: datesArray, updatedAt: Date.now() }
+      })
+    });
+  } catch (e) {
+    console.warn("Cloud push error:", e);
+  }
+}
+
+// Fetch Latest Booked Dates & Pricing from Cloud to Phone/Browser
+async function syncFromCloud() {
+  try {
+    const res = await fetch(CLOUD_SYNC_URL);
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.data && Array.isArray(json.data.dates)) {
+        localStorage.setItem('loveLawn_bookedDates', JSON.stringify(json.data.dates));
+        renderCalendar();
+      }
+    }
+  } catch (err) {
+    console.warn("Cloud sync offline fallback to local data:", err);
+  }
+
+  // Also sync pricing from cloud
+  try {
+    const priceRes = await fetch(CLOUD_PRICING_URL);
+    if (priceRes.ok) {
+      const priceJson = await priceRes.json();
+      if (priceJson && priceJson.data && typeof priceJson.data === 'object') {
+        localStorage.setItem('loveLawn_pricing', JSON.stringify(priceJson.data));
+        updatePricingLabels();
+        calculateTotal();
+      }
+    }
+  } catch (e) {}
+}
+
+// Auto-sync whenever phone tab becomes visible / focused and periodically
+window.addEventListener('focus', syncFromCloud);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') syncFromCloud();
+});
+setInterval(syncFromCloud, 8000);
 
 function getLivePricing() {
   const raw = localStorage.getItem('loveLawn_pricing');
@@ -259,10 +315,12 @@ function simulatePaymentSuccess() {
   const bookingId = `LL-${selectedDay.year}-${Math.floor(1000 + Math.random() * 9000)}`;
   const dateKey = `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`;
 
-  // 1. Mark this date as Booked in localStorage
+  // 1. Mark this date as Booked in localStorage & Push to Cloud
   const bookedSet = getLiveBookedDates();
   bookedSet.add(dateKey);
-  localStorage.setItem('loveLawn_bookedDates', JSON.stringify(Array.from(bookedSet)));
+  const updatedArr = Array.from(bookedSet);
+  localStorage.setItem('loveLawn_bookedDates', JSON.stringify(updatedArr));
+  syncDatesToCloud(updatedArr);
 
   // 2. Add Booking Record to localStorage
   let bookings = [];
@@ -309,7 +367,95 @@ function simulatePaymentSuccess() {
   document.getElementById('receipt-whatsapp-link').href = `https://wa.me/919876543210?text=${waMsg}`;
 }
 
-// Initial Render
+// Initial Render & Cloud Sync
 updatePricingLabels();
 renderCalendar();
 calculateTotal();
+syncFromCloud();
+
+// =====================================================
+// B-EGG INSPIRED PRELOADER, CURSOR & SMOOTH SCROLL
+// =====================================================
+function initBookingPreloader() {
+  const preloader = document.getElementById('luxury-preloader');
+  const numberEl = document.getElementById('preloader-number');
+  const barEl = document.getElementById('preloader-bar');
+  if (!preloader || !numberEl) return;
+
+  let current = 0;
+  const target = 100;
+  const duration = 1000;
+  const startTime = performance.now();
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function updateCount(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    current = Math.round(easeOutCubic(progress) * target);
+
+    numberEl.textContent = current;
+    if (barEl) barEl.style.width = current + '%';
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCount);
+    } else {
+      setTimeout(() => {
+        preloader.classList.add('preloader-hidden');
+      }, 150);
+    }
+  }
+
+  requestAnimationFrame(updateCount);
+}
+
+function initBookingLenis() {
+  if (typeof Lenis === 'undefined') return;
+  try {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  } catch (e) {}
+}
+
+function initBookingCursor() {
+  const dot = document.getElementById('cursor-dot');
+  const circle = document.getElementById('cursor-circle');
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth < 1024);
+  if (!dot || !circle || isTouch) return;
+
+  let mouseX = -100, mouseY = -100, circleX = -100, circleY = -100;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+  }, { passive: true });
+
+  function renderCursor() {
+    circleX += (mouseX - circleX) * 0.15;
+    circleY += (mouseY - circleY) * 0.15;
+    circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0)`;
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+
+  document.querySelectorAll('button, a, input, .cal-day, .slot-card, .addon-item').forEach(el => {
+    el.addEventListener('mouseenter', () => circle.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => circle.classList.remove('cursor-hover'));
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initBookingPreloader();
+  initBookingLenis();
+  initBookingCursor();
+});

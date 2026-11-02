@@ -121,6 +121,7 @@ function showDashboard() {
   renderBookingsTable();
   renderOwnerGalleryCards();
   updateQuickStats();
+  syncDatesFromCloud(); // Pull latest cloud dates & sync
 }
 
 // Device Binding Handlers
@@ -209,6 +210,65 @@ function togglePasswordVisibility() {
   }
 }
 
+// Central Real-Time Cloud Database Endpoints (Syncs All Phones & Computers Live)
+const CLOUD_SYNC_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a19d57ef2312c5";
+const CLOUD_PRICING_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a19d59769b12c7";
+
+async function syncDatesToCloud(datesArray) {
+  try {
+    await fetch(CLOUD_SYNC_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'LoveLawn_BookedDates',
+        data: { dates: datesArray, updatedAt: Date.now() }
+      })
+    });
+  } catch (e) {
+    console.warn("Cloud push error:", e);
+  }
+}
+
+async function syncPricingToCloud(pricingObj) {
+  try {
+    await fetch(CLOUD_PRICING_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'LoveLawn_Pricing',
+        data: pricingObj
+      })
+    });
+  } catch (e) {
+    console.warn("Cloud pricing push error:", e);
+  }
+}
+
+async function syncDatesFromCloud() {
+  try {
+    const res = await fetch(CLOUD_SYNC_URL);
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.data && Array.isArray(json.data.dates)) {
+        localStorage.setItem('loveLawn_bookedDates', JSON.stringify(json.data.dates));
+        renderOwnerCalendar();
+        updateQuickStats();
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const pRes = await fetch(CLOUD_PRICING_URL);
+    if (pRes.ok) {
+      const pJson = await pRes.json();
+      if (pJson && pJson.data && typeof pJson.data === 'object') {
+        localStorage.setItem('loveLawn_pricing', JSON.stringify(pJson.data));
+        loadPricingIntoForm();
+      }
+    }
+  } catch (e) {}
+}
+
 // -------------------------------------------------------------
 // AVAILABILITY CALENDAR & TOGGLE
 // -------------------------------------------------------------
@@ -230,8 +290,10 @@ function getBookedDatesSet() {
 }
 
 function saveBookedDatesSet(set) {
-  localStorage.setItem('loveLawn_bookedDates', JSON.stringify(Array.from(set)));
+  const arr = Array.from(set);
+  localStorage.setItem('loveLawn_bookedDates', JSON.stringify(arr));
   updateQuickStats();
+  syncDatesToCloud(arr); // Instantly broadcasts new dates to cloud so every phone updates!
 }
 
 function changeOwnerMonth(delta) {
@@ -379,6 +441,7 @@ function savePricingChanges(event) {
   };
 
   localStorage.setItem('loveLawn_pricing', JSON.stringify(newPricing));
+  syncPricingToCloud(newPricing); // Pushes updated prices to cloud for all mobile & desktop users
 
   const alertBox = document.getElementById('price-saved-alert');
   alertBox.style.display = 'inline-flex';
@@ -633,3 +696,56 @@ function copyLiveDatesConfig() {
     alert(`Current Booked Dates (${arr.length} total):\n` + JSON.stringify(arr));
   }
 }
+
+// =====================================================
+// B-EGG INSPIRED SMOOTH SCROLL & INTERACTIVE CURSOR
+// =====================================================
+function initOwnerLenis() {
+  if (typeof Lenis === 'undefined') return;
+  try {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  } catch (e) {}
+}
+
+function initOwnerCursor() {
+  const dot = document.getElementById('cursor-dot');
+  const circle = document.getElementById('cursor-circle');
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth < 1024);
+  if (!dot || !circle || isTouch) return;
+
+  let mouseX = -100, mouseY = -100, circleX = -100, circleY = -100;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+  }, { passive: true });
+
+  function renderCursor() {
+    circleX += (mouseX - circleX) * 0.15;
+    circleY += (mouseY - circleY) * 0.15;
+    circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0)`;
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+
+  document.querySelectorAll('button, a, input, .owner-day, .owner-photo-card').forEach(el => {
+    el.addEventListener('mouseenter', () => circle.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => circle.classList.remove('cursor-hover'));
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initOwnerLenis();
+  initOwnerCursor();
+});

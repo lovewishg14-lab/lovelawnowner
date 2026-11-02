@@ -289,3 +289,217 @@ if (document.readyState === 'loading') {
 } else {
   initStarField();
 }
+
+// =====================================================
+// B-EGG.FARM INSPIRED INTERACTION SUITE
+// =====================================================
+
+// 1. NUMERICAL PRELOADER (0% TO 100% WITH PROGRESS BAR)
+function initPreloader() {
+  const preloader = document.getElementById('luxury-preloader');
+  const numberEl = document.getElementById('preloader-number');
+  const barEl = document.getElementById('preloader-bar');
+  if (!preloader || !numberEl) return;
+
+  let current = 0;
+  const target = 100;
+  const duration = 1200; // 1.2s smooth count
+  const startTime = performance.now();
+
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function updateCount(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+    current = Math.round(eased * target);
+
+    numberEl.textContent = current;
+    if (barEl) barEl.style.width = current + '%';
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCount);
+    } else {
+      setTimeout(() => {
+        preloader.classList.add('preloader-hidden');
+        triggerEntranceAnimations();
+      }, 200);
+    }
+  }
+
+  requestAnimationFrame(updateCount);
+}
+
+function triggerEntranceAnimations() {
+  // GSAP or CSS entrance for hero elements
+  if (window.gsap) {
+    gsap.from('.main-title', {
+      y: 40,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power3.out'
+    });
+    gsap.from('.hero-subtitle', {
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      delay: 0.2,
+      ease: 'power3.out'
+    });
+    gsap.from('.cta-group', {
+      y: 25,
+      opacity: 0,
+      duration: 0.9,
+      delay: 0.35,
+      ease: 'power3.out'
+    });
+    gsap.from('.highlight-item', {
+      y: 20,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.8,
+      delay: 0.45,
+      ease: 'power2.out'
+    });
+  }
+}
+
+// 2. LENIS SMOOTH SCROLL (Fluid Silk Motion)
+function initLenis() {
+  if (typeof Lenis === 'undefined') return;
+  try {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Anchor smooth links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !href) return;
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          e.preventDefault();
+          lenis.scrollTo(targetEl, { offset: -40 });
+        }
+      });
+    });
+  } catch (e) {
+    console.warn('Lenis scroll fallback:', e);
+  }
+}
+
+// 3. CUSTOM FOLLOWER CURSOR (Desktop)
+function initCustomCursor() {
+  const dot = document.getElementById('cursor-dot');
+  const circle = document.getElementById('cursor-circle');
+  if (!dot || !circle || isMobileOrTouch) return;
+
+  let mouseX = -100, mouseY = -100;
+  let circleX = -100, circleY = -100;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+  }, { passive: true });
+
+  function renderCursor() {
+    circleX += (mouseX - circleX) * 0.15;
+    circleY += (mouseY - circleY) * 0.15;
+    circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0)`;
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+
+  // Hover states
+  const interactives = document.querySelectorAll('a, button, .feature-card, .highlight-item, .gallery-item, input, select');
+  interactives.forEach(el => {
+    el.addEventListener('mouseenter', () => circle.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => circle.classList.remove('cursor-hover'));
+  });
+}
+
+// 4. 3D TILT EFFECT ON CARDS
+function initCardTilt() {
+  if (isMobileOrTouch) return;
+  const cards = document.querySelectorAll('.feature-card, .highlight-item, .gallery-item');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -7;
+      const rotateY = ((x - centerX) / centerX) * 7;
+
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// 5. MAGNETIC BUTTON EFFECT
+function initMagneticButtons() {
+  if (isMobileOrTouch) return;
+  const btns = document.querySelectorAll('.btn-nav, .gold-btn-gradient, .btn-luxury');
+
+  btns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate3d(${x * 0.25}px, ${y * 0.25}px, 0) scale(1.04)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+// 6. SCROLL REVEAL OBSERVER
+function initScrollReveals() {
+  const elements = document.querySelectorAll('.reveal-fade-up, .reveal-stagger, .cards-grid, .section-header, .gallery-section');
+  if (!elements.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  elements.forEach(el => observer.observe(el));
+}
+
+// Initialize on Load
+document.addEventListener('DOMContentLoaded', () => {
+  initPreloader();
+  initLenis();
+  initCustomCursor();
+  initCardTilt();
+  initMagneticButtons();
+  initScrollReveals();
+});
