@@ -6,13 +6,8 @@ const monthNames = [
   "July", "August", "September", "October", "November", "December"
 ];
 
-// Fallback Defaults
-const DEFAULT_BOOKED_DATES = [
-  "2026-10-7", "2026-10-8", "2026-10-14", "2026-10-15",
-  "2026-10-21", "2026-10-22", "2026-10-27", "2026-10-28",
-  "2026-11-5", "2026-11-6", "2026-11-12", "2026-11-19",
-  "2026-11-20", "2026-11-25", "2026-11-31"
-];
+// Fallback Defaults (No automatic or dummy dates - starts completely clean)
+const DEFAULT_BOOKED_DATES = [];
 
 const DEFAULT_PRICING = {
   evening: 120000,
@@ -24,24 +19,31 @@ const DEFAULT_PRICING = {
   token: 25000
 };
 
-// Retrieve Shared Data from LocalStorage with guaranteed fallback to DEFAULT_BOOKED_DATES
+// Retrieve Shared Data from LocalStorage (Only genuine owner/customer booked dates appear)
 function getLiveBookedDates() {
   const raw = localStorage.getItem('loveLawn_bookedDates');
   if (!raw) {
-    try {
-      localStorage.setItem('loveLawn_bookedDates', JSON.stringify(DEFAULT_BOOKED_DATES));
-    } catch (e) {}
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   }
   try {
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      // Ensure DEFAULT_BOOKED_DATES are preserved as baseline so dates are never lost across devices
-      return new Set([...DEFAULT_BOOKED_DATES, ...parsed]);
+    if (Array.isArray(parsed)) {
+      // Filter out any legacy dummy/example dates
+      const legacyDummyDates = new Set([
+        "2026-10-7", "2026-10-8", "2026-10-14", "2026-10-15",
+        "2026-10-21", "2026-10-22", "2026-10-27", "2026-10-28",
+        "2026-11-5", "2026-11-6", "2026-11-12", "2026-11-19",
+        "2026-11-20", "2026-11-25", "2026-11-31"
+      ]);
+      const validDates = parsed.filter(d => !legacyDummyDates.has(d));
+      if (validDates.length !== parsed.length) {
+        try { localStorage.setItem('loveLawn_bookedDates', JSON.stringify(validDates)); } catch (e) {}
+      }
+      return new Set(validDates);
     }
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   } catch (e) {
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   }
 }
 
@@ -62,7 +64,8 @@ function getLivePricing() {
 }
 
 // State Management
-let currentDate = new Date(2026, 10, 1); // November 2026
+let currentDate = new Date();
+currentDate.setDate(1);
 let selectedDay = null;
 let currentPricing = getLivePricing();
 let basePrice = currentPricing.evening;

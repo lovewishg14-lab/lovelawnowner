@@ -1,12 +1,7 @@
 // Owner Portal Logic & Authentication System
 
-// Default Initial Data Setup
-const DEFAULT_BOOKED_DATES = [
-  "2026-10-7", "2026-10-8", "2026-10-14", "2026-10-15",
-  "2026-10-21", "2026-10-22", "2026-10-27", "2026-10-28",
-  "2026-11-5", "2026-11-6", "2026-11-12", "2026-11-19",
-  "2026-11-20", "2026-11-25", "2026-11-31"
-];
+// Clean Defaults (No automatic or dummy dates - starts completely clean)
+const DEFAULT_BOOKED_DATES = [];
 
 const DEFAULT_PRICING = {
   evening: 120000,
@@ -18,42 +13,30 @@ const DEFAULT_PRICING = {
   token: 25000
 };
 
-// Seed LocalStorage if not present
-if (!localStorage.getItem('loveLawn_bookedDates')) {
-  localStorage.setItem('loveLawn_bookedDates', JSON.stringify(DEFAULT_BOOKED_DATES));
-}
+// Legacy dummy dates to purge from any prior sessions
+const legacyDummyDates = new Set([
+  "2026-10-7", "2026-10-8", "2026-10-14", "2026-10-15",
+  "2026-10-21", "2026-10-22", "2026-10-27", "2026-10-28",
+  "2026-11-5", "2026-11-6", "2026-11-12", "2026-11-19",
+  "2026-11-20", "2026-11-25", "2026-11-31"
+]);
+
+// Clean legacy dummy dates from storage if present
+try {
+  const existingRaw = localStorage.getItem('loveLawn_bookedDates');
+  if (existingRaw) {
+    const existing = JSON.parse(existingRaw);
+    if (Array.isArray(existing)) {
+      const cleaned = existing.filter(d => !legacyDummyDates.has(d));
+      localStorage.setItem('loveLawn_bookedDates', JSON.stringify(cleaned));
+    }
+  }
+} catch (e) {}
 
 if (!localStorage.getItem('loveLawn_pricing')) {
-  localStorage.setItem('loveLawn_pricing', JSON.stringify(DEFAULT_PRICING));
-}
-
-if (!localStorage.getItem('loveLawn_bookings')) {
-  // Add sample real booking
-  const sampleBookings = [
-    {
-      id: "LL-2026-8492",
-      name: "Vikram Singhania",
-      phone: "9823012345",
-      email: "vikram@singhania.com",
-      eventType: "Wedding Ceremony & Reception",
-      slot: "Evening Gala (4 PM - 12 AM)",
-      dateStr: "14 November 2026",
-      tokenPaid: 25000,
-      timestamp: "2026-10-31"
-    },
-    {
-      id: "LL-2026-3190",
-      name: "Pooja Deshmukh",
-      phone: "9422156789",
-      email: "pooja.d@gmail.com",
-      eventType: "Sangeet / Haldi / Mehendi",
-      slot: "Full Day Royal (9 AM - 12 AM)",
-      dateStr: "21 November 2026",
-      tokenPaid: 25000,
-      timestamp: "2026-10-29"
-    }
-  ];
-  localStorage.setItem('loveLawn_bookings', JSON.stringify(sampleBookings));
+  try {
+    localStorage.setItem('loveLawn_pricing', JSON.stringify(DEFAULT_PRICING));
+  } catch (e) {}
 }
 
 // Master Device Configuration (Single Device Operation)
@@ -73,7 +56,8 @@ function getOwnerCredentials() {
 }
 
 // State
-let ownerCurrentDate = new Date(2026, 10, 1); // Nov 2026
+let ownerCurrentDate = new Date();
+ownerCurrentDate.setDate(1);
 const monthNames = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -231,19 +215,17 @@ function togglePasswordVisibility() {
 function getBookedDatesSet() {
   const raw = localStorage.getItem('loveLawn_bookedDates');
   if (!raw) {
-    try {
-      localStorage.setItem('loveLawn_bookedDates', JSON.stringify(DEFAULT_BOOKED_DATES));
-    } catch (e) {}
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   }
   try {
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return new Set(parsed);
+    if (Array.isArray(parsed)) {
+      const valid = parsed.filter(d => !legacyDummyDates.has(d));
+      return new Set(valid);
     }
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   } catch (e) {
-    return new Set(DEFAULT_BOOKED_DATES);
+    return new Set();
   }
 }
 
@@ -411,7 +393,11 @@ function savePricingChanges(event) {
 function getBookings() {
   const raw = localStorage.getItem('loveLawn_bookings');
   try {
-    return JSON.parse(raw) || [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed.filter(b => b.id !== "LL-2026-8492" && b.id !== "LL-2026-3190");
+    }
+    return [];
   } catch (e) {
     return [];
   }
