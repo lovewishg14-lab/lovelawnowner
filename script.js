@@ -1,18 +1,27 @@
+// Device & Performance Detection (Detects Mobile Phones even in Desktop Mode)
+const isMobileOrTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth < 1024);
+
 // Interactive Canvas Particles (Fireflies / Golden Dust)
 const canvas = document.getElementById('particles-canvas');
-const ctx = canvas.getContext('2d');
+let ctx = canvas ? canvas.getContext('2d') : null;
 
 let particles = [];
-let width, height;
+let width = 0, height = 0;
+let isCanvasRunning = false;
+let animFrameId = null;
 
-function resize() {
+function resizeCanvas() {
   if (!canvas) return;
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
 }
 
-window.addEventListener('resize', resize);
-resize();
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(resizeCanvas, 150);
+}, { passive: true });
+resizeCanvas();
 
 class Particle {
   constructor() {
@@ -22,17 +31,18 @@ class Particle {
   reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.size = Math.random() * 2.8 + 0.8;
-    this.speedX = (Math.random() - 0.5) * 0.7;
-    this.speedY = (Math.random() - 0.5) * 0.7 - 0.2;
-    this.alpha = Math.random() * 0.6 + 0.2;
-    this.pulse = Math.random() * 0.03 + 0.01;
+    this.size = Math.random() * 2.2 + 0.8;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.speedY = (Math.random() - 0.5) * 0.5 - 0.15;
+    this.alpha = Math.random() * 0.55 + 0.25;
+    this.pulse = Math.random() * 0.02 + 0.008;
+    
     // Royal Gold + Diamond Star + Plum shimmer particles
     const rand = Math.random();
     if (rand < 0.45) {
       this.color = '212, 175, 55'; // Royal Gold
     } else if (rand < 0.75) {
-      this.color = '252, 246, 186'; // Bright Starlight Gold
+      this.color = '252, 246, 186'; // Starlight Gold
     } else {
       this.color = '255, 255, 255'; // Diamond Star White
     }
@@ -54,33 +64,55 @@ class Particle {
   }
 
   draw() {
-    ctx.save();
+    // Ultra-fast dual-circle glow - Zero expensive shadowBlur
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color}, ${this.alpha * 0.28})`;
+    ctx.fill();
+
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
-    ctx.shadowBlur = 12;
-    ctx.shadowColor = `rgba(${this.color}, 0.8)`;
     ctx.fill();
-    ctx.restore();
   }
 }
 
-if (canvas) {
-  const particleCount = Math.min(window.innerWidth < 768 ? 35 : 75, 80);
+if (canvas && ctx) {
+  // 22 particles on mobile / desktop-mode-on-mobile, 45 on desktop
+  const particleCount = isMobileOrTouch ? 22 : 45;
   for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle());
   }
 
   function animateParticles() {
+    if (!isCanvasRunning) return;
     ctx.clearRect(0, 0, width, height);
-    for (let p of particles) {
-      p.update();
-      p.draw();
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
     }
-    requestAnimationFrame(animateParticles);
+    animFrameId = requestAnimationFrame(animateParticles);
   }
 
-  animateParticles();
+  // Pause canvas when user scrolls away from hero to save 100% GPU
+  function updateAnimationLoop() {
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const inHero = scrollY < window.innerHeight * 1.25;
+    const shouldRun = inHero && !document.hidden;
+
+    if (shouldRun && !isCanvasRunning) {
+      isCanvasRunning = true;
+      animFrameId = requestAnimationFrame(animateParticles);
+    } else if (!shouldRun && isCanvasRunning) {
+      isCanvasRunning = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+    }
+  }
+
+  window.addEventListener('scroll', updateAnimationLoop, { passive: true });
+  document.addEventListener('visibilitychange', updateAnimationLoop);
+  updateAnimationLoop();
 }
 
 // Interactive Word Hover Effect
@@ -222,35 +254,34 @@ function closeLightbox() {
 renderVenueGallery();
 
 // =========================================
-// ANIMATED TWINKLING STARS GENERATOR
+// ANIMATED TWINKLING STARS GENERATOR - HIGH PERFORMANCE
 // =========================================
 function initStarField() {
   const container = document.getElementById('star-container');
   if (!container) return;
   container.innerHTML = '';
-  const starCount = 100;
+  
+  // 35 stars on mobile/touch screens, 60 on desktop
+  const starCount = isMobileOrTouch ? 35 : 60;
+  const fragment = document.createDocumentFragment();
 
   for (let i = 0; i < starCount; i++) {
     const star = document.createElement('div');
     const isGold = Math.random() > 0.75;
-    star.classList.add('star');
-    if (isGold) star.classList.add('star-gold');
+    star.className = isGold ? 'star star-gold' : 'star';
 
     const top = Math.random() * 100;
     const left = Math.random() * 100;
-    const size = Math.random() * 2 + 1;
-    const duration = Math.random() * 4 + 2;
-    const delay = Math.random() * 4;
+    const size = (Math.random() * 1.6 + 1).toFixed(1);
+    const duration = (Math.random() * 3.5 + 2.5).toFixed(1);
+    const delay = (Math.random() * 3).toFixed(1);
 
-    star.style.top = `${top}%`;
-    star.style.left = `${left}%`;
-    star.style.width = `${size}px`;
-    star.style.height = `${size}px`;
-    star.style.setProperty('--duration', `${duration}s`);
-    star.style.animationDelay = `${delay}s`;
-
-    container.appendChild(star);
+    star.style.cssText = `top:${top}%;left:${left}%;width:${size}px;height:${size}px;--duration:${duration}s;animation-delay:${delay}s;`;
+    fragment.appendChild(star);
   }
+
+  // Single DOM insertion
+  container.appendChild(fragment);
 }
 
 if (document.readyState === 'loading') {

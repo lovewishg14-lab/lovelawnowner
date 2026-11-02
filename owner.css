@@ -964,3 +964,14 @@
     flex-direction: column;
   }
 }
+
+/* High Performance Mobile & Desktop-on-Mobile Optimizations */
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  .login-card,
+  .owner-card,
+  .owner-topbar {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(26, 16, 37, 0.96) !important;
+  }
+}

@@ -47,8 +47,23 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hardware-accelerated fixed background replacing laggy background-attachment: fixed */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background-image: radial-gradient(circle at center, #2d1b3d 0%, #1a1025 45%, #0d0714 100%);
-  background-attachment: fixed;
+  pointer-events: none;
+  z-index: -2;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 /* Background Animated Canvas */
@@ -60,48 +75,50 @@ body {
   height: 100vh;
   pointer-events: none;
   z-index: 0;
+  transform: translate3d(0, 0, 0);
 }
 
-/* Glowing Ambient Orbs */
+/* Glowing Ambient Orbs - Zero heavy blur filter, smooth gradient falloff */
 .glow-orb {
   position: fixed;
   border-radius: 50%;
-  filter: blur(120px);
   pointer-events: none;
-  z-index: 0;
-  animation: floatOrb 12s ease-in-out infinite alternate;
+  z-index: -1;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: floatOrb 18s ease-in-out infinite alternate;
 }
 
 .orb-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(107, 33, 168, 0.22), transparent 70%);
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(107, 33, 168, 0.28) 0%, rgba(107, 33, 168, 0.1) 40%, transparent 70%);
   top: 5%;
   left: 15%;
 }
 
 .orb-2 {
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.18), transparent 70%);
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.07) 40%, transparent 70%);
   bottom: 10%;
   right: 12%;
-  animation-duration: 16s;
+  animation-duration: 22s;
 }
 
 .orb-3 {
-  width: 440px;
-  height: 440px;
-  background: radial-gradient(circle, rgba(253, 224, 139, 0.15), transparent 70%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(253, 224, 139, 0.18) 0%, rgba(253, 224, 139, 0.05) 40%, transparent 70%);
   top: 45%;
   left: 60%;
-  animation-duration: 14s;
+  animation-duration: 20s;
 }
 
 @keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, -30px) scale(1.1); }
-  100% { transform: translate(-30px, 40px) scale(0.95); }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(25px, -20px, 0) scale(1.05); }
+  100% { transform: translate3d(-20px, 25px, 0) scale(0.95); }
 }
 
 /* Navigation Bar */
@@ -240,30 +257,32 @@ body {
   background-color: #ffffff;
   border-radius: 50%;
   animation: twinkle var(--duration, 3s) ease-in-out infinite alternate;
-  opacity: 0;
+  opacity: 0.15;
+  will-change: transform, opacity;
+  contain: strict;
+  transform: translate3d(0, 0, 0);
 }
 
 .star-gold {
   background-color: #fcf6ba;
-  box-shadow: 0 0 8px rgba(252, 246, 186, 0.75);
+  box-shadow: 0 0 6px rgba(252, 246, 186, 0.7);
 }
 
 @keyframes twinkle {
-  0% { opacity: 0.1; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px rgba(255, 255, 255, 0.85); }
+  0% { opacity: 0.15; transform: scale(0.7) translate3d(0, 0, 0); }
+  100% { opacity: 0.95; transform: scale(1.15) translate3d(0, 0, 0); }
 }
 
-/* Subtle Ambient Glow */
+/* Subtle Ambient Glow - Natural gradient falloff, zero heavy blur */
 .hero-ambient-glow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(107, 33, 168, 0.2), transparent 70%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(107, 33, 168, 0.22) 0%, rgba(107, 33, 168, 0.08) 50%, transparent 75%);
   border-radius: 50%;
-  filter: blur(120px);
   pointer-events: none;
   z-index: 0;
 }
@@ -365,24 +384,26 @@ body {
   animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
 }
 
-/* Shimmer sweeping light across gold text */
+/* Shimmer sweeping light across gold text - Hardware accelerated */
 .gold-text-gradient::after {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-  animation: sweepLight 4s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-150%);
+  animation: sweepLight 4.5s ease-in-out infinite;
   animation-delay: 1.8s;
   pointer-events: none;
+  will-change: transform;
 }
 
 @keyframes sweepLight {
-  0% { left: -120%; }
-  35% { left: 130%; }
-  100% { left: 130%; }
+  0% { transform: translateX(-150%); }
+  35% { transform: translateX(150%); }
+  100% { transform: translateX(150%); }
 }
 
 /* Decorative Gold Underline */
@@ -976,4 +997,53 @@ body {
 @media (max-width: 480px) {
   .highlights-grid { grid-template-columns: 1fr; }
   .btn { width: 100%; justify-content: center; }
+}
+
+/* ========================================================
+   HIGH PERFORMANCE MOBILE & DESKTOP-ON-MOBILE OPTIMIZATIONS
+   ======================================================== */
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  /* Disable continuous background floating repaints on touch / mobile devices */
+  .glow-orb {
+    animation: none !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+  
+  .orb-1, .orb-2, .orb-3 {
+    opacity: 0.7;
+  }
+
+  /* Simplify backdrop filters to free GPU bandwidth on mobile */
+  .navbar {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    background: rgba(13, 7, 20, 0.94) !important;
+  }
+
+  .feature-card,
+  .highlight-item,
+  .btn-glass,
+  .welcome-badge,
+  .filter-btn {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .feature-card {
+    background: rgba(26, 16, 37, 0.88) !important;
+  }
+
+  .feature-card.featured {
+    background: linear-gradient(180deg, rgba(45, 27, 61, 0.9) 0%, rgba(26, 16, 37, 0.96) 100%) !important;
+  }
+
+  .highlight-item {
+    background: rgba(26, 16, 37, 0.85) !important;
+  }
+
+  /* Ensure buttery smooth scrolling */
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
 }
