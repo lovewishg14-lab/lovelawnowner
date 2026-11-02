@@ -175,20 +175,34 @@
     <!-- Main Dashboard Container -->
     <main class="owner-main">
       
-      <!-- Welcome Header -->
+      <!-- Welcome Header with Rotating Security Badge -->
       <div class="dashboard-welcome">
         <div>
           <h1 class="welcome-heading">Welcome Back, Lawn Owner</h1>
           <p class="welcome-sub">Manage availability dates, adjust live rental pricing, and view customer reservations in real-time.</p>
         </div>
-        <div class="quick-stats-row">
-          <div class="stat-pill">
-            <span class="stat-num" id="stat-booked-count">0</span>
-            <span class="stat-text">Dates Booked</span>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div class="quick-stats-row">
+            <div class="stat-pill">
+              <span class="stat-num" id="stat-booked-count">0</span>
+              <span class="stat-text">Dates Booked</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num" id="stat-revenue-est">₹0</span>
+              <span class="stat-text">Advance Tokens</span>
+            </div>
           </div>
-          <div class="stat-pill">
-            <span class="stat-num" id="stat-revenue-est">₹0</span>
-            <span class="stat-text">Advance Tokens</span>
+          <!-- Rotating Security Stamp Badge (b-egg style) -->
+          <div class="rotating-stamp" style="width: 105px; height: 105px;">
+            <svg viewBox="0 0 200 200" class="stamp-svg">
+              <path id="owner-stamp-circle" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="transparent"/>
+              <text class="stamp-text" style="font-size: 13px;">
+                <textPath href="#owner-stamp-circle">★ OWNER CONSOLE ★ RESTRICTED MASTER KEY ★</textPath>
+              </text>
+            </svg>
+            <div class="stamp-center" style="width: 36px; height: 36px; font-size: 0.95rem;">
+              <i class="fa-solid fa-shield-halved text-gold"></i>
+            </div>
           </div>
         </div>
       </div>

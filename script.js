@@ -335,24 +335,40 @@ function initPreloader() {
 function triggerEntranceAnimations() {
   // GSAP or CSS entrance for hero elements
   if (window.gsap) {
-    gsap.from('.main-title', {
-      y: 40,
+    gsap.from('.editorial-line', {
+      y: 50,
       opacity: 0,
+      stagger: 0.14,
       duration: 1.1,
+      ease: 'power3.out'
+    });
+    gsap.from('.hero-tag-row .editorial-pill', {
+      scale: 0.8,
+      opacity: 0,
+      stagger: 0.08,
+      duration: 0.8,
+      ease: 'back.out(1.7)'
+    });
+    gsap.from('.rotating-stamp', {
+      scale: 0,
+      opacity: 0,
+      rotation: -180,
+      duration: 1.4,
+      delay: 0.2,
       ease: 'power3.out'
     });
     gsap.from('.hero-subtitle', {
       y: 30,
       opacity: 0,
       duration: 1,
-      delay: 0.2,
+      delay: 0.35,
       ease: 'power3.out'
     });
     gsap.from('.cta-group', {
       y: 25,
       opacity: 0,
       duration: 0.9,
-      delay: 0.35,
+      delay: 0.45,
       ease: 'power3.out'
     });
     gsap.from('.highlight-item', {
@@ -360,7 +376,7 @@ function triggerEntranceAnimations() {
       opacity: 0,
       stagger: 0.1,
       duration: 0.8,
-      delay: 0.45,
+      delay: 0.55,
       ease: 'power2.out'
     });
   }
@@ -494,6 +510,71 @@ function initScrollReveals() {
   elements.forEach(el => observer.observe(el));
 }
 
+// 7. BENTO MOUSE SPOTLIGHT (Radial gradient follows cursor on card)
+function initBentoSpotlight() {
+  const cards = document.querySelectorAll('.bento-card, .feature-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+}
+
+// 8. INTERACTIVE STARLIGHT AMBIENCE TOGGLE
+let isStarlightBoosted = false;
+function toggleStarlightAmbience() {
+  isStarlightBoosted = !isStarlightBoosted;
+  playLuxuryChime(580);
+  const orb1 = document.querySelector('.orb-1');
+  const orb2 = document.querySelector('.orb-2');
+  const btnText = document.getElementById('starlight-btn-text');
+
+  if (isStarlightBoosted) {
+    if (orb1) orb1.style.filter = 'brightness(1.6)';
+    if (orb2) orb2.style.filter = 'brightness(1.7)';
+    if (btnText) btnText.textContent = '✨ Starlight Active (Bright)';
+    document.body.style.boxShadow = 'inset 0 0 100px rgba(245, 195, 78, 0.15)';
+  } else {
+    if (orb1) orb1.style.filter = '';
+    if (orb2) orb2.style.filter = '';
+    if (btnText) btnText.textContent = 'Boost Starlight Glow';
+    document.body.style.boxShadow = '';
+  }
+}
+
+// 9. SOFT LUXURY CHIME AUDIO (Synthesizer via Web Audio API)
+function playLuxuryChime(freq = 520) {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, ctx.currentTime + 0.18);
+
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  } catch (e) {}
+}
+
+// Connect chime to primary luxury buttons
+document.querySelectorAll('.gold-btn-gradient, .btn-luxury, .filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => playLuxuryChime(640));
+});
+
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
@@ -502,4 +583,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCardTilt();
   initMagneticButtons();
   initScrollReveals();
+  initBentoSpotlight();
 });

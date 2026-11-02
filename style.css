@@ -1346,3 +1346,369 @@ html.lenis {
 .reveal-stagger.is-revealed > *:nth-child(2) { transition-delay: 0.16s; }
 .reveal-stagger.is-revealed > *:nth-child(3) { transition-delay: 0.24s; }
 .reveal-stagger.is-revealed > *:nth-child(4) { transition-delay: 0.32s; }
+
+/* =======================================================
+   B-EGG.FARM ULTRA KINETIC EDITORIAL HERO & BENTO SYSTEM
+   ======================================================= */
+
+/* 1. ROTATING CIRCULAR STAMP BADGE */
+.rotating-stamp-wrapper {
+  position: absolute;
+  top: 30px;
+  right: 5%;
+  z-index: 25;
+}
+
+.rotating-stamp {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stamp-svg {
+  width: 100%;
+  height: 100%;
+  animation: spinStamp 14s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spinStamp {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.stamp-text {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 2.8px;
+  fill: var(--gold-secondary);
+  text-transform: uppercase;
+}
+
+.stamp-center {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(34, 16, 31, 0.9);
+  border: 1px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+@media (max-width: 768px) {
+  .rotating-stamp-wrapper {
+    top: 15px;
+    right: 15px;
+    transform: scale(0.72);
+    transform-origin: top right;
+  }
+}
+
+/* 2. MASSIVE EDITORIAL HEADLINE (10vw, tight line-height, outline & inline pills) */
+.hero-editorial-wrap {
+  max-width: 1300px;
+  margin: 0 auto 30px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.editorial-pill {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(26, 16, 37, 0.7);
+  border: 1px solid rgba(214, 219, 227, 0.2);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.editorial-pill.highlight-pill {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: var(--gold-secondary);
+}
+
+.dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulseSparkle 1.8s infinite;
+}
+
+.giant-editorial-title {
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(3.2rem, 9.8vw, 8rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editorial-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: relative;
+}
+
+.serif-italic {
+  font-family: var(--font-cinzel), serif;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: lowercase;
+  font-size: 0.9em;
+  letter-spacing: 0;
+  background: linear-gradient(135deg, #fff 0%, #fde08b 60%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.outline-stroke {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.78);
+  transition: -webkit-text-stroke 0.3s ease, color 0.3s ease;
+}
+
+.outline-stroke:hover {
+  color: #fff;
+  -webkit-text-stroke: 1.5px #fff;
+}
+
+.highlight-shimmer {
+  background: linear-gradient(90deg, #d4af37 0%, #fff 25%, #fde08b 50%, #aa7c11 75%, #d4af37 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shineGold 4s linear infinite;
+}
+
+@keyframes shineGold {
+  to { background-position: 200% center; }
+}
+
+.inline-badge {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.18);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  color: var(--gold-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  vertical-align: middle;
+  transform: translateY(-8px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.inline-badge.pill-emerald {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #34d399;
+}
+
+/* 3. DUAL REVERSE MARQUEE */
+.marquee-reverse .marquee-track {
+  animation: marqueeRunReverse 28s linear infinite;
+}
+
+.marquee-strip.marquee-reverse {
+  border-top: none;
+  background: rgba(13, 7, 20, 0.9);
+}
+
+@keyframes marqueeRunReverse {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+/* 4. MASTER BENTO GRID SYSTEM */
+.bento-section {
+  padding: 90px 24px 100px;
+  position: relative;
+  z-index: 10;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  margin-top: 45px;
+}
+
+.bento-col-8 { grid-column: span 8; }
+.bento-col-4 { grid-column: span 4; }
+.bento-col-6 { grid-column: span 6; }
+
+.bento-card {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  padding: 38px 34px;
+  background: radial-gradient(
+    650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(212, 175, 55, 0.14),
+    transparent 55%
+  ), rgba(26, 16, 37, 0.82);
+  border: 1px solid rgba(214, 219, 227, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bento-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.18);
+}
+
+.bento-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.bento-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-secondary);
+  font-size: 1.5rem;
+}
+
+.bento-pill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-muted);
+}
+
+.bento-title {
+  font-family: var(--font-syne);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.bento-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+/* Interactive Soundwave Equalizer on Audio Stage Bento */
+.soundwave-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 36px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.soundwave-bar {
+  width: 4px;
+  border-radius: 99px;
+  background: var(--gold-secondary);
+  animation: eqJump 1.2s ease-in-out infinite alternate;
+}
+
+.soundwave-bar:nth-child(1) { height: 12px; animation-delay: 0.1s; }
+.soundwave-bar:nth-child(2) { height: 28px; animation-delay: 0.25s; }
+.soundwave-bar:nth-child(3) { height: 18px; animation-delay: 0.4s; }
+.soundwave-bar:nth-child(4) { height: 32px; animation-delay: 0.15s; }
+.soundwave-bar:nth-child(5) { height: 22px; animation-delay: 0.35s; }
+
+@keyframes eqJump {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* Starlight Dimmer Interactive Toggle */
+.dimmer-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dimmer-toggle-btn:hover {
+  background: var(--gold-secondary);
+  color: #1a0815;
+}
+
+@media (max-width: 992px) {
+  .bento-col-8,
+  .bento-col-4,
+  .bento-col-6 {
+    grid-column: span 12;
+  }
+}

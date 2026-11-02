@@ -68,6 +68,21 @@
   <!-- Hero Section -->
   <main id="home" class="hero hero-bg">
     
+    <!-- Rotating Circular Stamp Badge (b-egg luxury emblem) -->
+    <div class="rotating-stamp-wrapper">
+      <div class="rotating-stamp">
+        <svg viewBox="0 0 200 200" class="stamp-svg">
+          <path id="stamp-circle" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="transparent"/>
+          <text class="stamp-text">
+            <textPath href="#stamp-circle">★ LOVE LAWN NAGPUR ★ SANCTUARY OF ROYAL LUXURY ★</textPath>
+          </text>
+        </svg>
+        <div class="stamp-center">
+          <i class="fa-solid fa-crown text-gold"></i>
+        </div>
+      </div>
+    </div>
+
     <!-- Animated Stars Container -->
     <div id="star-container"></div>
     
@@ -76,25 +91,34 @@
 
     <div class="hero-container relative z-10">
 
-      <!-- Badge with Floating Animation -->
-      <div class="welcome-badge float-anim">
-        <span class="sparkle text-gold-400">✨</span>
-        <span class="badge-text">A Sanctuary of Elegance &amp; Serenity</span>
-        <span class="sparkle text-gold-400">✨</span>
+      <!-- Editorial Tag Pills -->
+      <div class="hero-tag-row">
+        <span class="editorial-pill"><span class="dot-live"></span> ESTD. 2026 NAGPUR</span>
+        <span class="editorial-pill">ROYAL DESTINATION</span>
+        <span class="editorial-pill highlight-pill">5 ACRES</span>
       </div>
 
-      <!-- Main Heading with Gold Gradient & Typography -->
-      <div class="title-wrapper">
-        <h1 class="main-title font-cinzel">
-          <span class="hero-subtext">Welcome To</span>
-          <span class="gold-text-gradient">LOVE LAWN</span>
+      <!-- Massive Editorial Title (b-egg style kinetic 10vw typography) -->
+      <div class="hero-editorial-wrap">
+        <h1 class="giant-editorial-title">
+          <span class="editorial-line line-1">
+            SANCTUARY
+            <span class="inline-badge float-badge"><i class="fa-solid fa-sparkles"></i> 2000+ GUESTS</span>
+          </span>
+          <span class="editorial-line line-2">
+            <span class="serif-italic">of Timeless</span>
+            <span class="outline-stroke">ELEGANCE</span>
+          </span>
+          <span class="editorial-line line-3">
+            <span class="highlight-shimmer">LOVE LAWN</span>
+            <span class="inline-badge pill-emerald"><i class="fa-solid fa-gem"></i> BESPOKE DECOR</span>
+          </span>
         </h1>
-        <div class="decorative-underline"></div>
       </div>
 
       <!-- Subtitle -->
       <p class="hero-subtitle">
-        Step into sprawling emerald greens beneath starlit skies. Where timeless luxury, natural beauty, and celebration come together.
+        Step into sprawling emerald greens beneath starlit skies. Where timeless luxury, natural beauty, and bespoke celebrations come together.
       </p>
 
       <!-- Action Buttons -->
@@ -147,7 +171,7 @@
     </div>
   </main>
 
-  <!-- Continuous Infinite Running Marquee (b-egg style) -->
+  <!-- Dual Continuous Running Marquees (b-egg style layered kinetics) -->
   <div class="marquee-strip">
     <div class="marquee-track">
       <div class="marquee-content">
@@ -181,33 +205,120 @@
     </div>
   </div>
 
-  <!-- Features Section -->
-  <section id="features" class="features-section reveal-fade-up">
+  <div class="marquee-strip marquee-reverse">
+    <div class="marquee-track">
+      <div class="marquee-content" style="color: #ffffff; opacity: 0.85;">
+        <span>💍 WEDDINGS &amp; RECEPTIONS</span>
+        <span class="marquee-star">✦</span>
+        <span>🌹 FLORAL MANDAP DESIGN</span>
+        <span class="marquee-star">✦</span>
+        <span>💎 V.I.P. AIR-COOLED SUITES</span>
+        <span class="marquee-star">✦</span>
+        <span>🚗 300+ VALET PARKING SLOTS</span>
+        <span class="marquee-star">✦</span>
+        <span>🎪 OPULENT GAZEBO BANQUET</span>
+        <span class="marquee-star">✦</span>
+        <span>⚡ 100% POWER BACKUP DIESEL GENSET</span>
+        <span class="marquee-star">✦</span>
+      </div>
+      <div class="marquee-content" aria-hidden="true" style="color: #ffffff; opacity: 0.85;">
+        <span>💍 WEDDINGS &amp; RECEPTIONS</span>
+        <span class="marquee-star">✦</span>
+        <span>🌹 FLORAL MANDAP DESIGN</span>
+        <span class="marquee-star">✦</span>
+        <span>💎 V.I.P. AIR-COOLED SUITES</span>
+        <span class="marquee-star">✦</span>
+        <span>🚗 300+ VALET PARKING SLOTS</span>
+        <span class="marquee-star">✦</span>
+        <span>🎪 OPULENT GAZEBO BANQUET</span>
+        <span class="marquee-star">✦</span>
+        <span>⚡ 100% POWER BACKUP DIESEL GENSET</span>
+        <span class="marquee-star">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bento Grid Section (b-egg style interactive spotlight bento) -->
+  <section id="features" class="bento-section reveal-fade-up">
     <div class="section-header">
-      <span class="section-tag">PREMIUM AMENITIES</span>
+      <span class="section-tag">PREMIUM AMENITIES &amp; INFRASTRUCTURE</span>
       <h2 class="section-title">Designed for Dream Celebrations</h2>
       <p class="section-desc">From grand royal weddings to private candle-lit soirees, every inch is crafted for magic.</p>
     </div>
 
-    <div class="cards-grid">
-      <div class="feature-card">
-        <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-        <h3>Lush Velvet Lawns</h3>
-        <p>Expertly manicured Bermuda grass fields offering an expansive, verdant floor for your special occasions.</p>
+    <div class="bento-grid">
+      
+      <!-- Bento 1: 5-Acre Velvet Grounds -->
+      <div class="bento-card bento-col-8">
+        <div>
+          <div class="bento-card-top">
+            <div class="bento-icon-box"><i class="fa-solid fa-tree"></i></div>
+            <span class="bento-pill-tag">5 ACRES • BERMUDA GRASS</span>
+          </div>
+          <h3 class="bento-title">Sprawling Velvet Meadows &amp; Grand Royal Walkway</h3>
+          <p class="bento-desc">Expertly manicured, lush green grass lawns providing an expansive, verdant floor capable of hosting over 2,000 esteemed guests with regal grandeur.</p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <span class="editorial-pill"><i class="fa-solid fa-circle-check" style="color: #34d399;"></i> 2000+ Seating Capacity</span>
+          <span class="editorial-pill"><i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Wide Red Carpet Walkways</span>
+        </div>
       </div>
 
-      <div class="feature-card featured">
-        <div class="card-badge">Most Loved</div>
-        <div class="card-icon"><i class="fa-solid fa-lightbulb"></i></div>
-        <h3>Bespoke Fairy Lighting</h3>
-        <p>Thousands of warm ambient lanterns, chandeliers, and starlight canopy lights that transform the evening.</p>
+      <!-- Bento 2: Twilight Starlight Canopy with Interactive Dimmer -->
+      <div class="bento-card bento-col-4">
+        <div>
+          <div class="bento-card-top">
+            <div class="bento-icon-box"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <span class="bento-pill-tag">AMBIENT LIGHTING</span>
+          </div>
+          <h3 class="bento-title">Starlight Fairy Light Canopy</h3>
+          <p class="bento-desc">Thousands of warm ambient golden fairy lights and crystal chandeliers transforming night into pure celestial magic.</p>
+        </div>
+        <div>
+          <button type="button" class="dimmer-toggle-btn" id="toggle-starlight-btn" onclick="toggleStarlightAmbience()">
+            <i class="fa-solid fa-lightbulb"></i> <span id="starlight-btn-text">Boost Starlight Glow</span>
+          </button>
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="card-icon"><i class="fa-solid fa-music"></i></div>
-        <h3>Acoustic Stage & Pavilion</h3>
-        <p>Premium covered stages equipped with state-of-the-art sound systems and royal backdrop designs.</p>
+      <!-- Bento 3: Acoustic Concert Stage with Live Soundwaves -->
+      <div class="bento-card bento-col-6">
+        <div>
+          <div class="bento-card-top">
+            <div class="bento-icon-box"><i class="fa-solid fa-music"></i></div>
+            <div class="soundwave-wrap" title="Concert Acoustic System Active">
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+            </div>
+          </div>
+          <h3 class="bento-title">Acoustic Concert Stage &amp; Royal Mandap</h3>
+          <p class="bento-desc">Covered mega-stage with high-fidelity concert line-array sound systems, moving beam lasers, and customizable floral backdrops for unforgettable Sangeet nights.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <span class="editorial-pill"><i class="fa-solid fa-compact-disc text-gold"></i> Live DJ Ready</span>
+          <span class="editorial-pill"><i class="fa-solid fa-microphone text-gold"></i> Crown Mandap</span>
+        </div>
       </div>
+
+      <!-- Bento 4: Luxury Open-Air Banquet Seating -->
+      <div class="bento-card bento-col-6">
+        <div>
+          <div class="bento-card-top">
+            <div class="bento-icon-box"><i class="fa-solid fa-utensils"></i></div>
+            <span class="bento-pill-tag">CHEF BUFFET ZONE</span>
+          </div>
+          <h3 class="bento-title">Open-Air Candlelight Banquet Dining</h3>
+          <p class="bento-desc">Grand multi-cuisine dining pavilion accommodating hundreds of guests simultaneously with dedicated hot live counters and VIP lounge areas.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <span class="editorial-pill"><i class="fa-solid fa-wine-glass text-gold"></i> VIP Gazebos</span>
+          <span class="editorial-pill"><i class="fa-solid fa-kitchen-set text-gold"></i> 40+ Food Counters</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
