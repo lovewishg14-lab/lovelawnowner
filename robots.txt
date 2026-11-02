@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /owner.html
+Disallow: /owner.js
+Disallow: /owner.css
+
+Sitemap: https://lovelawnowner.vercel.app/

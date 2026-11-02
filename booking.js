@@ -24,11 +24,22 @@ const DEFAULT_PRICING = {
   token: 25000
 };
 
-// Retrieve Shared Data from LocalStorage
+// Retrieve Shared Data from LocalStorage with guaranteed fallback to DEFAULT_BOOKED_DATES
 function getLiveBookedDates() {
   const raw = localStorage.getItem('loveLawn_bookedDates');
+  if (!raw) {
+    try {
+      localStorage.setItem('loveLawn_bookedDates', JSON.stringify(DEFAULT_BOOKED_DATES));
+    } catch (e) {}
+    return new Set(DEFAULT_BOOKED_DATES);
+  }
   try {
-    return new Set(JSON.parse(raw));
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      // Ensure DEFAULT_BOOKED_DATES are preserved as baseline so dates are never lost across devices
+      return new Set([...DEFAULT_BOOKED_DATES, ...parsed]);
+    }
+    return new Set(DEFAULT_BOOKED_DATES);
   } catch (e) {
     return new Set(DEFAULT_BOOKED_DATES);
   }
@@ -36,8 +47,15 @@ function getLiveBookedDates() {
 
 function getLivePricing() {
   const raw = localStorage.getItem('loveLawn_pricing');
+  if (!raw) {
+    try {
+      localStorage.setItem('loveLawn_pricing', JSON.stringify(DEFAULT_PRICING));
+    } catch (e) {}
+    return DEFAULT_PRICING;
+  }
   try {
-    return JSON.parse(raw) || DEFAULT_PRICING;
+    const parsed = JSON.parse(raw);
+    return (parsed && typeof parsed === 'object') ? parsed : DEFAULT_PRICING;
   } catch (e) {
     return DEFAULT_PRICING;
   }

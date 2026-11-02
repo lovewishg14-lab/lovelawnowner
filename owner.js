@@ -56,11 +56,13 @@ if (!localStorage.getItem('loveLawn_bookings')) {
   localStorage.setItem('loveLawn_bookings', JSON.stringify(sampleBookings));
 }
 
-// Credentials Check
-const OWNER_CREDENTIALS = {
-  user: "owner",
-  pass: "lawn123"
-};
+// Dynamic Credentials Check (Owner can customize password from dashboard)
+function getOwnerCredentials() {
+  return {
+    user: localStorage.getItem('loveLawn_ownerUser') || "owner",
+    pass: localStorage.getItem('loveLawn_ownerPass') || "lawn123"
+  };
+}
 
 // State
 let ownerCurrentDate = new Date(2026, 10, 1); // Nov 2026
@@ -95,18 +97,36 @@ function showDashboard() {
   updateQuickStats();
 }
 
-// Login Handler
+// Login Handler with Brute-Force Rate Limiting & Protection
+let failedAttempts = parseInt(sessionStorage.getItem('loveLawn_failedAttempts') || '0', 10);
+
 function handleOwnerLogin(event) {
   event.preventDefault();
   const user = document.getElementById('owner-username').value.trim();
   const pass = document.getElementById('owner-password').value;
   const errorMsg = document.getElementById('login-error-msg');
+  const creds = getOwnerCredentials();
 
-  if (user === OWNER_CREDENTIALS.user && pass === OWNER_CREDENTIALS.pass) {
+  if (user === creds.user && pass === creds.pass) {
     sessionStorage.setItem('loveLawn_ownerSession', 'true');
+    sessionStorage.removeItem('loveLawn_failedAttempts');
     errorMsg.style.display = 'none';
     showDashboard();
   } else {
+    failedAttempts++;
+    sessionStorage.setItem('loveLawn_failedAttempts', failedAttempts.toString());
+    const remaining = 3 - failedAttempts;
+    
+    if (remaining <= 0) {
+      errorMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Too many failed attempts. Returning to public website...`;
+      errorMsg.style.display = 'flex';
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+      return;
+    }
+
+    errorMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Invalid Owner ID or Password. (${remaining} attempt${remaining === 1 ? '' : 's'} remaining)`;
     errorMsg.style.display = 'flex';
   }
 }
@@ -136,8 +156,18 @@ function togglePasswordVisibility() {
 // -------------------------------------------------------------
 function getBookedDatesSet() {
   const raw = localStorage.getItem('loveLawn_bookedDates');
+  if (!raw) {
+    try {
+      localStorage.setItem('loveLawn_bookedDates', JSON.stringify(DEFAULT_BOOKED_DATES));
+    } catch (e) {}
+    return new Set(DEFAULT_BOOKED_DATES);
+  }
   try {
-    return new Set(JSON.parse(raw));
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return new Set(parsed);
+    }
+    return new Set(DEFAULT_BOOKED_DATES);
   } catch (e) {
     return new Set(DEFAULT_BOOKED_DATES);
   }
@@ -254,8 +284,15 @@ function toggleManualDate(action) {
 // -------------------------------------------------------------
 function getPricing() {
   const raw = localStorage.getItem('loveLawn_pricing');
+  if (!raw) {
+    try {
+      localStorage.setItem('loveLawn_pricing', JSON.stringify(DEFAULT_PRICING));
+    } catch (e) {}
+    return DEFAULT_PRICING;
+  }
   try {
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return (parsed && typeof parsed === 'object') ? parsed : DEFAULT_PRICING;
   } catch (e) {
     return DEFAULT_PRICING;
   }
@@ -472,5 +509,67 @@ function deleteVenuePhoto(photoId, photoTitle) {
     let photos = getOwnerPhotos();
     photos = photos.filter(p => p.id !== photoId);
     saveOwnerPhotos(photos);
+  }
+}
+
+// -------------------------------------------------------------
+// OWNER SECURITY & PASSWORD CUSTOMIZATION
+// -------------------------------------------------------------
+function handleUpdateOwnerPassword(event) {
+  event.preventDefault();
+  const currentPass = document.getElementById('curr-owner-pass').value;
+  const newPass = document.getElementById('new-owner-pass').value;
+  const confirmPass = document.getElementById('confirm-owner-pass').value;
+  const alertBox = document.getElementById('pass-updated-alert');
+  const creds = getOwnerCredentials();
+
+  if (currentPass !== creds.pass) {
+    alert("❌ Current password is incorrect. Please re-enter your existing password.");
+    return;
+  }
+
+  if (newPass.length < 6) {
+    alert("❌ New password must be at least 6 characters long.");
+    return;
+  }
+
+  if (newPass !== confirmPass) {
+    alert("❌ New passwords do not match. Please verify.");
+    return;
+  }
+
+  localStorage.setItem('loveLawn_ownerPass', newPass);
+  document.getElementById('curr-owner-pass').value = '';
+  document.getElementById('new-owner-pass').value = '';
+  document.getElementById('confirm-owner-pass').value = '';
+
+  alertBox.style.display = 'inline-flex';
+  setTimeout(() => {
+    alertBox.style.display = 'none';
+  }, 4000);
+}
+
+// -------------------------------------------------------------
+// EXPORT & SYNC DATES HELPER
+// -------------------------------------------------------------
+function copyLiveDatesConfig() {
+  const bookedSet = getBookedDatesSet();
+  const arr = Array.from(bookedSet);
+  const jsonStr = JSON.stringify(arr, null, 2);
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      const notif = document.getElementById('export-copy-alert');
+      if (notif) {
+        notif.style.display = 'inline-flex';
+        setTimeout(() => { notif.style.display = 'none'; }, 3500);
+      } else {
+        alert(`✓ All ${arr.length} booked dates copied to clipboard!`);
+      }
+    }).catch(() => {
+      alert(`Current Booked Dates:\n` + JSON.stringify(arr));
+    });
+  } else {
+    alert(`Current Booked Dates (${arr.length} total):\n` + JSON.stringify(arr));
   }
 }

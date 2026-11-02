@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Owner Portal & Lawn Management | Love Lawn</title>
   
   <!-- Google Fonts: Cinzel & Montserrat -->
@@ -61,11 +62,6 @@
           <span>Authorize & Enter Dashboard</span>
           <i class="fa-solid fa-arrow-right-to-bracket"></i>
         </button>
-
-        <div class="demo-credentials-hint">
-          <span>🔐 Default Owner Login:</span>
-          <strong>ID: <code>owner</code> | Password: <code>lawn123</code></strong>
-        </div>
 
         <div class="back-home-wrap">
           <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Public Website</a>
@@ -169,6 +165,22 @@
               <button type="button" class="btn btn-available-action" onclick="toggleManualDate('free')">
                 <i class="fa-solid fa-check"></i> Mark as Available
               </button>
+            </div>
+          </div>
+
+          <!-- Export & Sync Live Dates -->
+          <div class="export-dates-bar" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              <i class="fa-solid fa-lock" style="color: var(--gold-primary); margin-right: 6px;"></i>
+              <span>All booked dates stay locked on public customer devices.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button type="button" class="btn btn-glass btn-sm" onclick="copyLiveDatesConfig()">
+                <i class="fa-solid fa-copy"></i> Copy Live Dates Config
+              </button>
+              <span id="export-copy-alert" class="saved-notification" style="display: none;">
+                <i class="fa-solid fa-circle-check"></i> Dates copied!
+              </span>
             </div>
           </div>
         </section>
@@ -366,6 +378,43 @@
             <!-- Dynamically populated from localStorage -->
           </div>
         </div>
+      </section>
+
+      <!-- SECTION 5: Owner Portal Security & Password Management -->
+      <section class="owner-card security-manager-card" style="margin-top: 36px;">
+        <div class="bookings-card-header">
+          <div>
+            <span class="card-tag"><i class="fa-solid fa-shield-halved"></i> SECURITY & AUTHENTICATION</span>
+            <h2 class="card-title">Confidential Owner Password</h2>
+            <p class="card-desc">Keep your owner management console safe. You can change your private password here anytime.</p>
+          </div>
+        </div>
+
+        <form id="change-pass-form" onsubmit="handleUpdateOwnerPassword(event)" style="margin-top: 20px;">
+          <div class="photo-form-row">
+            <div class="photo-field">
+              <label>Current Password *</label>
+              <input type="password" id="curr-owner-pass" placeholder="Enter current password" required>
+            </div>
+            <div class="photo-field">
+              <label>New Secret Password *</label>
+              <input type="password" id="new-owner-pass" placeholder="Enter new password (min 6 characters)" required>
+            </div>
+            <div class="photo-field">
+              <label>Confirm New Password *</label>
+              <input type="password" id="confirm-owner-pass" placeholder="Re-type new password" required>
+            </div>
+          </div>
+
+          <div class="photo-submit-row" style="margin-top: 18px;">
+            <button type="submit" class="btn btn-luxury">
+              <i class="fa-solid fa-key"></i> Update Secret Password
+            </button>
+            <span id="pass-updated-alert" class="saved-notification" style="display: none;">
+              <i class="fa-solid fa-circle-check"></i> Owner password updated securely!
+            </span>
+          </div>
+        </form>
       </section>
 
     </main>
