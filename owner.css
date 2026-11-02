@@ -964,25 +964,34 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.25s ease;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s ease;
 }
 
 .owner-photo-card:hover {
   border-color: var(--silver-bright);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.15);
 }
 
 .owner-thumb-wrap {
   position: relative;
   height: 160px;
   width: 100%;
+  overflow: hidden;
 }
 
 .owner-thumb-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.owner-photo-card:hover .owner-thumb-wrap img {
+  transform: scale(1.08);
 }
 
 .owner-photo-tag {

@@ -450,10 +450,10 @@ function initCustomCursor() {
   });
 }
 
-// 4. 3D TILT EFFECT ON CARDS
+// 4. 3D TILT EFFECT ON CARDS & SHOWCASE
 function initCardTilt() {
   if (isMobileOrTouch) return;
-  const cards = document.querySelectorAll('.feature-card, .highlight-item, .gallery-item');
+  const cards = document.querySelectorAll('.feature-card, .highlight-item, .gallery-item, .showcase-img-container');
   
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -462,10 +462,10 @@ function initCardTilt() {
       const y = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -7;
-      const rotateY = ((x - centerX) / centerX) * 7;
+      const rotateX = ((y - centerY) / centerY) * -5;
+      const rotateY = ((x - centerX) / centerX) * 5;
 
-      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.02)`;
+      card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px) scale(1.015)`;
     });
 
     card.addEventListener('mouseleave', () => {
@@ -570,10 +570,7 @@ function playLuxuryChime(freq = 520) {
   } catch (e) {}
 }
 
-// Connect chime to primary luxury buttons
-document.querySelectorAll('.gold-btn-gradient, .btn-luxury, .filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => playLuxuryChime(640));
-});
+// Synthesizer chime available if explicitly requested, but disabled from auto-click to maintain calm elegance
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
