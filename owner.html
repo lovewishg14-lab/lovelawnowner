@@ -24,12 +24,81 @@
   <div class="glow-orb orb-2"></div>
   <div class="glow-orb orb-3"></div>
 
-  <!-- Owner Login Section (Shown if NOT logged in) -->
-  <div id="owner-login-view" class="login-wrapper">
+  <!-- VIEW 1: Unauthorized Device Lockout Screen (Shown to ANY device that is NOT the owner's single registered device) -->
+  <div id="device-lockout-view" class="login-wrapper" style="display: none;">
+    <div class="login-card lockout-card">
+      <div class="lockout-icon-wrap">
+        <i class="fa-solid fa-shield-virus lockout-icon"></i>
+      </div>
+      <div class="login-badge badge-danger">
+        <i class="fa-solid fa-ban"></i>
+        <span>DEVICE ACCESS RESTRICTED</span>
+      </div>
+      <h2 style="font-family: var(--font-cinzel); color: #fff; margin-bottom: 12px;">Unregistered Device</h2>
+      <p class="login-desc">This Owner Portal is cryptographically locked to the <strong>Lawn Owner's Single Registered Device</strong> only.<br><br>Access from secondary phones, public terminals, or outside browsers is prohibited to protect venue bookings and data integrity.</p>
+      
+      <div class="device-info-pill">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <span>Hardware Status: Unauthorized Browser</span>
+      </div>
+
+      <div class="lockout-actions">
+        <a href="index.html" class="btn btn-luxury full-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Return to Love Lawn Public Website</span>
+        </a>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button type="button" class="btn btn-glass btn-sm" onclick="showDevicePairingScreen()" style="font-size: 0.78rem; opacity: 0.7;">
+          <i class="fa-solid fa-key"></i> Owner? Authorize This Device
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: Master Device Setup & Pairing Screen -->
+  <div id="device-setup-view" class="login-wrapper" style="display: none;">
     <div class="login-card">
       <div class="login-badge">
-        <i class="fa-solid fa-lock"></i>
-        <span>Restricted Owner Access</span>
+        <i class="fa-solid fa-link"></i>
+        <span>ONE-TIME DEVICE BINDING</span>
+      </div>
+      <div class="brand-logo-owner">
+        <i class="fa-solid fa-crown text-gold"></i>
+        <h2>LOVE LAWN</h2>
+        <span class="sub-label">Designate Master Owner Device</span>
+      </div>
+      <p class="login-desc">To ensure <strong>only ONE device</strong> in the world can operate this website, enter your confidential Master Key to bind this device.</p>
+
+      <form id="device-binding-form" onsubmit="handleDeviceBinding(event)">
+        <div class="owner-field">
+          <label><i class="fa-solid fa-key"></i> Master Device Passkey</label>
+          <input type="password" id="master-device-key-input" placeholder="Enter Master Passkey" required autocomplete="off">
+        </div>
+        
+        <div id="device-bind-error" class="login-error" style="display: none;">
+          <i class="fa-solid fa-triangle-exclamation"></i> Invalid Master Passkey. Access Denied.
+        </div>
+
+        <button type="submit" class="btn btn-luxury full-btn">
+          <i class="fa-solid fa-lock"></i>
+          <span>Lock & Bind This Device</span>
+        </button>
+
+        <div class="back-home-wrap">
+          <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Public Website</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- VIEW 3: Owner Login Section (Shown ONLY if this is the verified Master Device) -->
+  <div id="owner-login-view" class="login-wrapper" style="display: none;">
+    <div class="login-card">
+      <div class="login-badge badge-success">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Authorized Master Device ✓</span>
       </div>
 
       <div class="brand-logo-owner">
@@ -38,7 +107,7 @@
         <span class="sub-label">Proprietor / Management Console</span>
       </div>
 
-      <p class="login-desc">This portal is strictly reserved for the owner of Love Lawn. Please enter your confidential credentials to manage dates, bookings, and pricing.</p>
+      <p class="login-desc">Hardware signature verified. Please enter your confidential credentials to manage dates, bookings, and pricing.</p>
 
       <form id="owner-login-form" onsubmit="handleOwnerLogin(event)">
         <div class="owner-field">
@@ -415,6 +484,21 @@
             </span>
           </div>
         </form>
+        <!-- Device Binding Status Box -->
+        <div style="margin-top: 24px; padding: 18px 20px; background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(52, 211, 153, 0.15); display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 1.3rem;">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #34d399; font-size: 0.95rem;">Single Device Lock: ACTIVE ✓</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">This phone/computer is the sole authorized device. All other public devices are locked out.</div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-glass btn-sm" onclick="handleUnpairDevice()" style="color: #fca5a5; border-color: rgba(239,68,68,0.3);">
+            <i class="fa-solid fa-link-slash"></i> Unpair This Device
+          </button>
+        </div>
       </section>
 
     </main>

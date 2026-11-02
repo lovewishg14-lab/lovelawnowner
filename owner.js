@@ -56,6 +56,14 @@ if (!localStorage.getItem('loveLawn_bookings')) {
   localStorage.setItem('loveLawn_bookings', JSON.stringify(sampleBookings));
 }
 
+// Master Device Configuration (Single Device Operation)
+const MASTER_DEVICE_PASSKEY = "LAWN-OWNER-7788";
+
+function isDeviceAuthorized() {
+  const token = localStorage.getItem('loveLawn_masterDeviceToken');
+  return !!token && token.startsWith('LL-MASTER-DEV-');
+}
+
 // Dynamic Credentials Check (Owner can customize password from dashboard)
 function getOwnerCredentials() {
   return {
@@ -71,22 +79,56 @@ const monthNames = [
   "July", "August", "September", "October", "November", "December"
 ];
 
-// Initialize View on Load
+// Initialize View on Load with Strict Single-Device Verification
 document.addEventListener('DOMContentLoaded', () => {
   const isAuth = sessionStorage.getItem('loveLawn_ownerSession') === 'true';
-  if (isAuth) {
-    showDashboard();
-  } else {
+  const isAuthorizedDevice = isDeviceAuthorized();
+
+  // Check URL query parameters for fast master activation (e.g. ?key=LAWN-OWNER-7788)
+  const urlParams = new URLSearchParams(window.location.search);
+  const fastKey = urlParams.get('key') || urlParams.get('setup');
+  if (fastKey === MASTER_DEVICE_PASSKEY) {
+    bindCurrentDevice();
     showLogin();
+    return;
+  }
+
+  if (isAuthorizedDevice) {
+    if (isAuth) {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+  } else {
+    // If not authorized device, display strict lockout screen
+    showDeviceLockout();
   }
 });
 
+function showDeviceLockout() {
+  document.getElementById('device-lockout-view').style.display = 'flex';
+  document.getElementById('device-setup-view').style.display = 'none';
+  document.getElementById('owner-login-view').style.display = 'none';
+  document.getElementById('owner-dashboard-view').style.display = 'none';
+}
+
+function showDevicePairingScreen() {
+  document.getElementById('device-lockout-view').style.display = 'none';
+  document.getElementById('device-setup-view').style.display = 'flex';
+  document.getElementById('owner-login-view').style.display = 'none';
+  document.getElementById('owner-dashboard-view').style.display = 'none';
+}
+
 function showLogin() {
+  document.getElementById('device-lockout-view').style.display = 'none';
+  document.getElementById('device-setup-view').style.display = 'none';
   document.getElementById('owner-login-view').style.display = 'flex';
   document.getElementById('owner-dashboard-view').style.display = 'none';
 }
 
 function showDashboard() {
+  document.getElementById('device-lockout-view').style.display = 'none';
+  document.getElementById('device-setup-view').style.display = 'none';
   document.getElementById('owner-login-view').style.display = 'none';
   document.getElementById('owner-dashboard-view').style.display = 'block';
   
@@ -95,6 +137,38 @@ function showDashboard() {
   renderBookingsTable();
   renderOwnerGalleryCards();
   updateQuickStats();
+}
+
+// Device Binding Handlers
+function bindCurrentDevice() {
+  const token = 'LL-MASTER-DEV-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+  localStorage.setItem('loveLawn_masterDeviceToken', token);
+  localStorage.setItem('loveLawn_deviceBound', 'true');
+}
+
+function handleDeviceBinding(event) {
+  event.preventDefault();
+  const inputKey = document.getElementById('master-device-key-input').value.trim();
+  const errorMsg = document.getElementById('device-bind-error');
+
+  if (inputKey === MASTER_DEVICE_PASSKEY) {
+    bindCurrentDevice();
+    errorMsg.style.display = 'none';
+    alert("✓ Device Verified! This phone/computer is now registered as the Sole Authorized Owner Device.");
+    showLogin();
+  } else {
+    errorMsg.style.display = 'flex';
+  }
+}
+
+function handleUnpairDevice() {
+  const confirmUnpair = confirm("Are you sure you want to unpair this device?\n\nYou will need your Master Passkey (LAWN-OWNER-7788) to authorize any device in the future.");
+  if (confirmUnpair) {
+    localStorage.removeItem('loveLawn_masterDeviceToken');
+    sessionStorage.removeItem('loveLawn_ownerSession');
+    alert("Device has been unpaired. This browser is now locked out.");
+    showDeviceLockout();
+  }
 }
 
 // Login Handler with Brute-Force Rate Limiting & Protection
