@@ -27,7 +27,15 @@ class Particle {
     this.speedY = (Math.random() - 0.5) * 0.7 - 0.2;
     this.alpha = Math.random() * 0.6 + 0.2;
     this.pulse = Math.random() * 0.03 + 0.01;
-    this.color = Math.random() > 0.4 ? '246, 211, 101' : '52, 211, 153';
+    // Dusty Mauve + Pearl + Silver luxury shimmer particles
+    const rand = Math.random();
+    if (rand < 0.38) {
+      this.color = '194, 145, 167'; // Dusty Mauve
+    } else if (rand < 0.72) {
+      this.color = '252, 249, 245'; // Pearl Luminous
+    } else {
+      this.color = '214, 219, 227'; // Shimmering Silver
+    }
   }
 
   update() {
